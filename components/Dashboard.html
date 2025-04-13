@@ -1,0 +1,449 @@
+<!-- LemonVows Dashboard Component -->
+<div class="lv-dashboard">
+  <div class="lv-container">
+    <!-- Welcome Section with Countdown -->
+    <div class="lv-dashboard-header lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-body lv-p-3">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <h2 class="lv-welcome-title">Willkommen, <span class="lv-user-name">Anna & Thomas</span>!</h2>
+              <p class="lv-wedding-date">Eure Hochzeit ist am <span class="lv-date">15. August 2025</span></p>
+              <p class="lv-wedding-location">Location: <span class="lv-location">Schloss Elmau</span></p>
+            </div>
+            <div class="lv-col lv-col-md-6 lv-text-center">
+              <div class="lv-countdown">
+                <div class="lv-countdown-value">127</div>
+                <div class="lv-countdown-label">Tage bis zur Hochzeit</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quick Access Tiles -->
+    <div class="lv-dashboard-tiles lv-mb-3">
+      <div class="lv-row">
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#guests">
+            <div class="lv-tile-icon">👥</div>
+            <div class="lv-tile-content">
+              <h3>Gäste</h3>
+              <p>120 Einladungen</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#budget">
+            <div class="lv-tile-icon">💰</div>
+            <div class="lv-tile-content">
+              <h3>Budget</h3>
+              <p>25.000 € Budget</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#timeline">
+            <div class="lv-tile-icon">📅</div>
+            <div class="lv-tile-content">
+              <h3>Zeitplan</h3>
+              <p>15 offene Aufgaben</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#tables">
+            <div class="lv-tile-icon">🪑</div>
+            <div class="lv-tile-content">
+              <h3>Tischplan</h3>
+              <p>12 Tische geplant</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#vendors">
+            <div class="lv-tile-icon">🤝</div>
+            <div class="lv-tile-content">
+              <h3>Dienstleister</h3>
+              <p>8 Dienstleister</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#gallery">
+            <div class="lv-tile-icon">📸</div>
+            <div class="lv-tile-content">
+              <h3>Galerie</h3>
+              <p>3 Alben</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#polls">
+            <div class="lv-tile-icon">📊</div>
+            <div class="lv-tile-content">
+              <h3>Umfragen</h3>
+              <p>2 aktive Umfragen</p>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-sm-6 lv-col-md-4 lv-col-lg-3 lv-mb-2">
+          <div class="lv-tile" data-link="#settings">
+            <div class="lv-tile-icon">⚙️</div>
+            <div class="lv-tile-content">
+              <h3>Einstellungen</h3>
+              <p>Anpassen</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tasks and Stats Section -->
+    <div class="lv-dashboard-content">
+      <div class="lv-row">
+        <!-- Tasks List -->
+        <div class="lv-col lv-col-lg-6 lv-mb-3">
+          <div class="lv-card">
+            <div class="lv-card-header lv-d-flex lv-justify-content-between lv-align-items-center">
+              <h3>Anstehende Aufgaben</h3>
+              <button class="lv-btn lv-btn-primary lv-add-task-btn">+ Aufgabe</button>
+            </div>
+            <div class="lv-card-body">
+              <ul class="lv-task-list">
+                <li class="lv-task-item">
+                  <div class="lv-task-checkbox">
+                    <input type="checkbox" id="task1" class="lv-task-check">
+                    <label for="task1"></label>
+                  </div>
+                  <div class="lv-task-content">
+                    <h4>Menü mit Caterer besprechen</h4>
+                    <p>Fällig: 20.04.2025</p>
+                  </div>
+                  <div class="lv-task-priority lv-priority-high">Hoch</div>
+                </li>
+                <li class="lv-task-item">
+                  <div class="lv-task-checkbox">
+                    <input type="checkbox" id="task2" class="lv-task-check">
+                    <label for="task2"></label>
+                  </div>
+                  <div class="lv-task-content">
+                    <h4>Einladungen versenden</h4>
+                    <p>Fällig: 30.04.2025</p>
+                  </div>
+                  <div class="lv-task-priority lv-priority-medium">Mittel</div>
+                </li>
+                <li class="lv-task-item">
+                  <div class="lv-task-checkbox">
+                    <input type="checkbox" id="task3" class="lv-task-check">
+                    <label for="task3"></label>
+                  </div>
+                  <div class="lv-task-content">
+                    <h4>Blumendekoration auswählen</h4>
+                    <p>Fällig: 15.05.2025</p>
+                  </div>
+                  <div class="lv-task-priority lv-priority-medium">Mittel</div>
+                </li>
+                <li class="lv-task-item">
+                  <div class="lv-task-checkbox">
+                    <input type="checkbox" id="task4" class="lv-task-check">
+                    <label for="task4"></label>
+                  </div>
+                  <div class="lv-task-content">
+                    <h4>Hochzeitstorte bestellen</h4>
+                    <p>Fällig: 01.06.2025</p>
+                  </div>
+                  <div class="lv-task-priority lv-priority-low">Niedrig</div>
+                </li>
+                <li class="lv-task-item">
+                  <div class="lv-task-checkbox">
+                    <input type="checkbox" id="task5" class="lv-task-check">
+                    <label for="task5"></label>
+                  </div>
+                  <div class="lv-task-content">
+                    <h4>Musikauswahl für DJ zusammenstellen</h4>
+                    <p>Fällig: 15.06.2025</p>
+                  </div>
+                  <div class="lv-task-priority lv-priority-medium">Mittel</div>
+                </li>
+              </ul>
+              <div class="lv-text-center lv-mt-2">
+                <a href="#timeline" class="lv-btn lv-btn-outline">Alle Aufgaben anzeigen</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stats Section -->
+        <div class="lv-col lv-col-lg-6">
+          <!-- Guest Stats -->
+          <div class="lv-card lv-mb-3">
+            <div class="lv-card-header">
+              <h3>Gästeübersicht</h3>
+            </div>
+            <div class="lv-card-body">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">120</div>
+                  <div class="lv-stat-label">Eingeladen</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">78</div>
+                  <div class="lv-stat-label">Zugesagt</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-danger">12</div>
+                  <div class="lv-stat-label">Abgesagt</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-warning">30</div>
+                  <div class="lv-stat-label">Ausstehend</div>
+                </div>
+              </div>
+              <div class="lv-progress-container lv-mt-2">
+                <div class="lv-progress-bar">
+                  <div class="lv-progress-segment lv-progress-success" style="width: 65%"></div>
+                  <div class="lv-progress-segment lv-progress-danger" style="width: 10%"></div>
+                  <div class="lv-progress-segment lv-progress-warning" style="width: 25%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Budget Stats -->
+          <div class="lv-card">
+            <div class="lv-card-header">
+              <h3>Budgetübersicht</h3>
+            </div>
+            <div class="lv-card-body">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">25.000 €</div>
+                  <div class="lv-stat-label">Gesamtbudget</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-info">16.250 €</div>
+                  <div class="lv-stat-label">Ausgegeben</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">8.750 €</div>
+                  <div class="lv-stat-label">Verbleibend</div>
+                </div>
+              </div>
+              <div class="lv-progress-container lv-mt-2">
+                <div class="lv-progress-bar">
+                  <div class="lv-progress-segment lv-progress-info" style="width: 65%"></div>
+                </div>
+                <div class="lv-progress-label">65% des Budgets ausgegeben</div>
+              </div>
+              <div class="lv-budget-categories lv-mt-2">
+                <div class="lv-budget-category">
+                  <div class="lv-d-flex lv-justify-content-between">
+                    <span>Location</span>
+                    <span>8.000 € / 10.000 €</span>
+                  </div>
+                  <div class="lv-progress-bar lv-progress-sm">
+                    <div class="lv-progress-segment lv-progress-info" style="width: 80%"></div>
+                  </div>
+                </div>
+                <div class="lv-budget-category">
+                  <div class="lv-d-flex lv-justify-content-between">
+                    <span>Catering</span>
+                    <span>5.000 € / 7.000 €</span>
+                  </div>
+                  <div class="lv-progress-bar lv-progress-sm">
+                    <div class="lv-progress-segment lv-progress-info" style="width: 71%"></div>
+                  </div>
+                </div>
+                <div class="lv-budget-category">
+                  <div class="lv-d-flex lv-justify-content-between">
+                    <span>Dekoration</span>
+                    <span>2.000 € / 3.000 €</span>
+                  </div>
+                  <div class="lv-progress-bar lv-progress-sm">
+                    <div class="lv-progress-segment lv-progress-info" style="width: 67%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="lv-modal" id="addTaskModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3>Neue Aufgabe hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="addTaskForm">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskTitle">Titel</label>
+            <input type="text" class="lv-form-control" id="taskTitle" placeholder="Aufgabentitel eingeben">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskDescription">Beschreibung</label>
+            <textarea class="lv-form-control" id="taskDescription" rows="3" placeholder="Beschreibung eingeben"></textarea>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskCategory">Kategorie</label>
+            <select class="lv-form-control" id="taskCategory">
+              <option value="location">Location</option>
+              <option value="catering">Catering</option>
+              <option value="decoration">Dekoration</option>
+              <option value="music">Musik</option>
+              <option value="attire">Kleidung</option>
+              <option value="other">Sonstiges</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskDueDate">Fälligkeitsdatum</label>
+            <input type="date" class="lv-form-control" id="taskDueDate">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskPriority">Priorität</label>
+            <select class="lv-form-control" id="taskPriority">
+              <option value="high">Hoch</option>
+              <option value="medium" selected>Mittel</option>
+              <option value="low">Niedrig</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveTaskBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tile click functionality
+    const tiles = document.querySelectorAll('.lv-tile');
+    tiles.forEach(tile => {
+      tile.addEventListener('click', function() {
+        const link = this.getAttribute('data-link');
+        if (link) {
+          window.location.href = link;
+        }
+      });
+    });
+    
+    // Task checkbox functionality
+    const taskChecks = document.querySelectorAll('.lv-task-check');
+    taskChecks.forEach(check => {
+      check.addEventListener('change', function() {
+        const taskItem = this.closest('.lv-task-item');
+        if (this.checked) {
+          taskItem.classList.add('lv-task-completed');
+          // Here you would typically update the task status in your database
+        } else {
+          taskItem.classList.remove('lv-task-completed');
+        }
+      });
+    });
+    
+    // Modal functionality
+    const addTaskBtn = document.querySelector('.lv-add-task-btn');
+    const addTaskModal = document.getElementById('addTaskModal');
+    const modalClose = document.querySelector('.lv-modal-close');
+    const modalCancel = document.querySelector('.lv-modal-cancel');
+    const saveTaskBtn = document.getElementById('saveTaskBtn');
+    
+    function openModal() {
+      addTaskModal.classList.add('lv-modal-open');
+    }
+    
+    function closeModal() {
+      addTaskModal.classList.remove('lv-modal-open');
+    }
+    
+    if (addTaskBtn) {
+      addTaskBtn.addEventListener('click', openModal);
+    }
+    
+    if (modalClose) {
+      modalClose.addEventListener('click', closeModal);
+    }
+    
+    if (modalCancel) {
+      modalCancel.addEventListener('click', closeModal);
+    }
+    
+    if (saveTaskBtn) {
+      saveTaskBtn.addEventListener('click', function() {
+        // Here you would typically save the task to your database
+        // For now, we'll just close the modal
+        closeModal();
+        
+        // You could also add the new task to the UI
+        const taskTitle = document.getElementById('taskTitle').value;
+        const taskDueDate = document.getElementById('taskDueDate').value;
+        const taskPriority = document.getElementById('taskPriority').value;
+        
+        if (taskTitle && taskDueDate) {
+          addTaskToList(taskTitle, taskDueDate, taskPriority);
+        }
+      });
+    }
+    
+    function addTaskToList(title, dueDate, priority) {
+      const taskList = document.querySelector('.lv-task-list');
+      if (!taskList) return;
+      
+      // Format the date
+      const formattedDate = new Date(dueDate).toLocaleDateString('de-DE');
+      
+      // Create new task item
+      const newTask = document.createElement('li');
+      newTask.className = 'lv-task-item';
+      
+      // Determine priority class
+      let priorityClass = 'lv-priority-medium';
+      let priorityText = 'Mittel';
+      
+      if (priority === 'high') {
+        priorityClass = 'lv-priority-high';
+        priorityText = 'Hoch';
+      } else if (priority === 'low') {
+        priorityClass = 'lv-priority-low';
+        priorityText = 'Niedrig';
+      }
+      
+      // Set the HTML content
+      newTask.innerHTML = `
+        <div class="lv-task-checkbox">
+          <input type="checkbox" id="task-new" class="lv-task-check">
+          <label for="task-new"></label>
+        </div>
+        <div class="lv-task-content">
+          <h4>${title}</h4>
+          <p>Fällig: ${formattedDate}</p>
+        </div>
+        <div class="lv-task-priority ${priorityClass}">${priorityText}</div>
+      `;
+      
+      // Add the new task to the list
+      taskList.appendChild(newTask);
+      
+      // Add event listener to the new checkbox
+      const newCheckbox = newTask.querySelector('.lv-task-check');
+      newCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          newTask.classList.add('lv-task-completed');
+        } else {
+          newTask.classList.remove('lv-task-completed');
+        }
+      });
+    }
+  });
+</script>

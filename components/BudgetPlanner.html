@@ -1,0 +1,867 @@
+<!-- LemonVows Budget Planner Component -->
+<div class="lv-budget-planner">
+  <div class="lv-container">
+    <!-- Header Section with Budget Overview -->
+    <div class="lv-budget-header lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-body lv-p-3">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <h2>Budgetplaner</h2>
+              <p>Verwalten Sie Ihr Hochzeitsbudget und verfolgen Sie Ihre Ausgaben</p>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">25.000 €</div>
+                  <div class="lv-stat-label">Gesamtbudget</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-info">16.250 €</div>
+                  <div class="lv-stat-label">Ausgegeben</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">8.750 €</div>
+                  <div class="lv-stat-label">Verbleibend</div>
+                </div>
+              </div>
+              <div class="lv-progress-container lv-mt-2">
+                <div class="lv-progress-bar">
+                  <div class="lv-progress-segment lv-progress-info" style="width: 65%"></div>
+                </div>
+                <div class="lv-progress-label">65% des Budgets ausgegeben</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Bar -->
+    <div class="lv-action-bar lv-mb-3">
+      <div class="lv-row">
+        <div class="lv-col lv-col-md-6">
+          <div class="lv-budget-settings">
+            <div class="lv-form-group lv-d-flex lv-align-items-center">
+              <label class="lv-form-label lv-mb-0 lv-mr-2">Gesamtbudget:</label>
+              <input type="number" class="lv-form-control" id="totalBudget" value="25000">
+              <span class="lv-currency">€</span>
+              <button class="lv-btn lv-btn-outline lv-ml-2" id="updateBudgetBtn">Aktualisieren</button>
+            </div>
+          </div>
+        </div>
+        <div class="lv-col lv-col-md-6 lv-text-right">
+          <button class="lv-btn lv-btn-primary lv-add-expense-btn">Neue Ausgabe</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="lv-filter-bar lv-mb-3">
+      <div class="lv-filter-group">
+        <button class="lv-filter-btn lv-filter-active" data-filter="all">Alle</button>
+        <button class="lv-filter-btn" data-filter="paid">Bezahlt</button>
+        <button class="lv-filter-btn" data-filter="pending">Ausstehend</button>
+        <button class="lv-filter-btn lv-filter-warning" data-filter="over-budget">Überbudget</button>
+      </div>
+      <div class="lv-filter-group">
+        <select class="lv-form-control lv-filter-select" id="categoryFilter">
+          <option value="all">Alle Kategorien</option>
+          <option value="venue">Location</option>
+          <option value="catering">Catering</option>
+          <option value="decoration">Dekoration</option>
+          <option value="attire">Kleidung</option>
+          <option value="photography">Fotografie</option>
+          <option value="music">Musik</option>
+          <option value="transportation">Transport</option>
+          <option value="other">Sonstiges</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Budget Categories -->
+    <div class="lv-budget-categories lv-mb-3">
+      <div class="lv-row">
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="venue">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">🏰</div>
+              <div class="lv-category-title">Location</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">10.000 €</div>
+                <div class="lv-category-spent">8.000 € (80%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 80%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Schloss Elmau</div>
+                  <div class="lv-expense-amount">8.000 €</div>
+                </div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="venue">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="catering">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">🍽️</div>
+              <div class="lv-category-title">Catering</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">7.000 €</div>
+                <div class="lv-category-spent">5.000 € (71%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 71%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Gourmet Catering</div>
+                  <div class="lv-expense-amount">4.500 €</div>
+                </div>
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Getränke</div>
+                  <div class="lv-expense-amount">500 €</div>
+                </div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="catering">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="decoration">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">💐</div>
+              <div class="lv-category-title">Dekoration</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">3.000 €</div>
+                <div class="lv-category-spent">2.000 € (67%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 67%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Blumendekoration</div>
+                  <div class="lv-expense-amount">1.500 €</div>
+                </div>
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Tischdekoration</div>
+                  <div class="lv-expense-amount">500 €</div>
+                </div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="decoration">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="attire">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">👰</div>
+              <div class="lv-category-title">Kleidung</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">2.000 €</div>
+                <div class="lv-category-spent">1.250 € (63%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 63%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Brautkleid</div>
+                  <div class="lv-expense-amount">1.000 €</div>
+                </div>
+                <div class="lv-expense-item">
+                  <div class="lv-expense-name">Accessoires</div>
+                  <div class="lv-expense-amount">250 €</div>
+                </div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="attire">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="photography">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">📸</div>
+              <div class="lv-category-title">Fotografie</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">1.500 €</div>
+                <div class="lv-category-spent">0 € (0%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 0%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-empty-expenses">Keine Ausgaben</div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="photography">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card" data-category="music">
+            <div class="lv-category-header">
+              <div class="lv-category-icon">🎵</div>
+              <div class="lv-category-title">Musik</div>
+            </div>
+            <div class="lv-category-content">
+              <div class="lv-category-stats">
+                <div class="lv-category-budget">1.000 €</div>
+                <div class="lv-category-spent">0 € (0%)</div>
+              </div>
+              <div class="lv-progress-bar lv-progress-sm">
+                <div class="lv-progress-segment lv-progress-info" style="width: 0%"></div>
+              </div>
+              <div class="lv-category-expenses">
+                <div class="lv-empty-expenses">Keine Ausgaben</div>
+              </div>
+              <button class="lv-add-expense-category-btn" data-category="music">+ Ausgabe hinzufügen</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="lv-col lv-col-md-6 lv-col-lg-4 lv-mb-3">
+          <div class="lv-category-card lv-category-add">
+            <div class="lv-category-add-content">
+              <div class="lv-category-add-icon">+</div>
+              <div class="lv-category-add-text">Neue Kategorie hinzufügen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Expense List -->
+    <div class="lv-expense-list lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-header">
+          <h3>Alle Ausgaben</h3>
+        </div>
+        <div class="lv-card-body lv-p-0">
+          <table class="lv-table">
+            <thead>
+              <tr>
+                <th>Ausgabe</th>
+                <th>Kategorie</th>
+                <th>Betrag</th>
+                <th>Status</th>
+                <th>Fälligkeitsdatum</th>
+                <th>Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+              <tr data-status="paid" data-category="venue">
+                <td>Schloss Elmau</td>
+                <td>Location</td>
+                <td>8.000 €</td>
+                <td><span class="lv-badge lv-badge-success">Bezahlt</span></td>
+                <td>15.03.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="1">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="1">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="paid" data-category="catering">
+                <td>Gourmet Catering</td>
+                <td>Catering</td>
+                <td>4.500 €</td>
+                <td><span class="lv-badge lv-badge-success">Bezahlt</span></td>
+                <td>01.04.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="2">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="2">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="paid" data-category="catering">
+                <td>Getränke</td>
+                <td>Catering</td>
+                <td>500 €</td>
+                <td><span class="lv-badge lv-badge-success">Bezahlt</span></td>
+                <td>01.04.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="3">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="3">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="paid" data-category="decoration">
+                <td>Blumendekoration</td>
+                <td>Dekoration</td>
+                <td>1.500 €</td>
+                <td><span class="lv-badge lv-badge-success">Bezahlt</span></td>
+                <td>15.05.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="4">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="4">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="pending" data-category="decoration">
+                <td>Tischdekoration</td>
+                <td>Dekoration</td>
+                <td>500 €</td>
+                <td><span class="lv-badge lv-badge-warning">Ausstehend</span></td>
+                <td>01.06.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="5">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="5">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="paid" data-category="attire">
+                <td>Brautkleid</td>
+                <td>Kleidung</td>
+                <td>1.000 €</td>
+                <td><span class="lv-badge lv-badge-success">Bezahlt</span></td>
+                <td>15.04.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="6">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="6">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-status="pending" data-category="attire">
+                <td>Accessoires</td>
+                <td>Kleidung</td>
+                <td>250 €</td>
+                <td><span class="lv-badge lv-badge-warning">Ausstehend</span></td>
+                <td>01.05.2025</td>
+                <td>
+                  <div class="lv-action-buttons">
+                    <button class="lv-btn-icon lv-edit-expense" data-id="7">✏️</button>
+                    <button class="lv-btn-icon lv-delete-expense" data-id="7">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Expense Modal -->
+<div class="lv-modal" id="expenseModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3 id="expenseModalTitle">Ausgabe hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="expenseForm">
+          <input type="hidden" id="expenseId" value="">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseName">Bezeichnung*</label>
+                <input type="text" class="lv-form-control" id="expenseName" required placeholder="Bezeichnung der Ausgabe">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseCategory">Kategorie*</label>
+                <select class="lv-form-control" id="expenseCategory" required>
+                  <option value="">Bitte wählen</option>
+                  <option value="venue">Location</option>
+                  <option value="catering">Catering</option>
+                  <option value="decoration">Dekoration</option>
+                  <option value="attire">Kleidung</option>
+                  <option value="photography">Fotografie</option>
+                  <option value="music">Musik</option>
+                  <option value="transportation">Transport</option>
+                  <option value="other">Sonstiges</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseAmount">Betrag (€)*</label>
+                <input type="number" class="lv-form-control" id="expenseAmount" required placeholder="0.00" step="0.01" min="0">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseStatus">Status</label>
+                <select class="lv-form-control" id="expenseStatus">
+                  <option value="pending">Ausstehend</option>
+                  <option value="paid">Bezahlt</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseDueDate">Fälligkeitsdatum</label>
+                <input type="date" class="lv-form-control" id="expenseDueDate">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="expenseVendor">Dienstleister</label>
+                <input type="text" class="lv-form-control" id="expenseVendor" placeholder="Name des Dienstleisters">
+              </div>
+            </div>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="expenseNotes">Notizen</label>
+            <textarea class="lv-form-control" id="expenseNotes" rows="3" placeholder="Zusätzliche Informationen"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveExpenseBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="lv-modal" id="categoryModal">
+  <div class="lv-modal-dialog lv-modal-sm">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3>Neue Kategorie hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="categoryForm">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="categoryName">Name*</label>
+            <input type="text" class="lv-form-control" id="categoryName" required placeholder="Name der Kategorie">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="categoryIcon">Icon</label>
+            <select class="lv-form-control" id="categoryIcon">
+              <option value="🏰">🏰 Location</option>
+              <option value="🍽️">🍽️ Catering</option>
+              <option value="💐">💐 Dekoration</option>
+              <option value="👰">👰 Kleidung</option>
+              <option value="📸">📸 Fotografie</option>
+              <option value="🎵">🎵 Musik</option>
+              <option value="🚗">🚗 Transport</option>
+              <option value="💍">💍 Ringe</option>
+              <option value="🎂">🎂 Torte</option>
+              <option value="📝">📝 Papeterie</option>
+              <option value="🎁">🎁 Geschenke</option>
+              <option value="✨">✨ Sonstiges</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="categoryBudget">Budget (€)*</label>
+            <input type="number" class="lv-form-control" id="categoryBudget" required placeholder="0.00" step="0.01" min="0">
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveCategoryBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="lv-modal" id="deleteModal">
+  <div class="lv-modal-dialog lv-modal-sm">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3>Ausgabe löschen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <p>Sind Sie sicher, dass Sie diese Ausgabe löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <input type="hidden" id="deleteExpenseId" value="">
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-danger" id="confirmDeleteBtn">Löschen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Modal functionality
+    const expenseModal = document.getElementById('expenseModal');
+    const categoryModal = document.getElementById('categoryModal');
+    const deleteModal = document.getElementById('deleteModal');
+    const addExpenseBtn = document.querySelector('.lv-add-expense-btn');
+    const addCategoryCard = document.querySelector('.lv-category-add');
+    const addExpenseCategoryBtns = document.querySelectorAll('.lv-add-expense-category-btn');
+    const modalCloseButtons = document.querySelectorAll('.lv-modal-close, .lv-modal-cancel');
+    const saveExpenseBtn = document.getElementById('saveExpenseBtn');
+    const saveCategoryBtn = document.getElementById('saveCategoryBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const updateBudgetBtn = document.getElementById('updateBudgetBtn');
+    
+    // Open add expense modal
+    if (addExpenseBtn) {
+      addExpenseBtn.addEventListener('click', function() {
+        openExpenseModal();
+      });
+    }
+    
+    // Open add expense modal with category pre-selected
+    addExpenseCategoryBtns.forEach(button => {
+      button.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        openExpenseModal(null, category);
+      });
+    });
+    
+    // Open add category modal
+    if (addCategoryCard) {
+      addCategoryCard.addEventListener('click', function() {
+        categoryModal.classList.add('lv-modal-open');
+      });
+    }
+    
+    // Close modals
+    modalCloseButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        closeAllModals();
+      });
+    });
+    
+    // Edit expense buttons
+    const editButtons = document.querySelectorAll('.lv-edit-expense');
+    editButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const expenseId = this.getAttribute('data-id');
+        openExpenseModal(expenseId);
+      });
+    });
+    
+    // Delete expense buttons
+    const deleteButtons = document.querySelectorAll('.lv-delete-expense');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const expenseId = this.getAttribute('data-id');
+        openDeleteModal(expenseId);
+      });
+    });
+    
+    // Save expense
+    if (saveExpenseBtn) {
+      saveExpenseBtn.addEventListener('click', function() {
+        saveExpense();
+      });
+    }
+    
+    // Save category
+    if (saveCategoryBtn) {
+      saveCategoryBtn.addEventListener('click', function() {
+        saveCategory();
+      });
+    }
+    
+    // Confirm delete
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.addEventListener('click', function() {
+        deleteExpense();
+      });
+    }
+    
+    // Update total budget
+    if (updateBudgetBtn) {
+      updateBudgetBtn.addEventListener('click', function() {
+        updateTotalBudget();
+      });
+    }
+    
+    // Filter buttons
+    const filterButtons = document.querySelectorAll('.lv-filter-btn');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('lv-filter-active'));
+        // Add active class to clicked button
+        this.classList.add('lv-filter-active');
+        
+        const filter = this.getAttribute('data-filter');
+        filterExpenses('status', filter);
+      });
+    });
+    
+    // Category filter
+    const categoryFilter = document.getElementById('categoryFilter');
+    if (categoryFilter) {
+      categoryFilter.addEventListener('change', function() {
+        const filter = this.value;
+        filterExpenses('category', filter);
+      });
+    }
+    
+    // Functions
+    function openExpenseModal(expenseId = null, category = null) {
+      // Reset form
+      document.getElementById('expenseForm').reset();
+      document.getElementById('expenseId').value = '';
+      document.getElementById('expenseModalTitle').textContent = 'Ausgabe hinzufügen';
+      
+      // Pre-select category if provided
+      if (category) {
+        document.getElementById('expenseCategory').value = category;
+      }
+      
+      if (expenseId) {
+        // Edit mode - populate form with expense data
+        document.getElementById('expenseModalTitle').textContent = 'Ausgabe bearbeiten';
+        document.getElementById('expenseId').value = expenseId;
+        
+        // Here you would typically fetch the expense data from your database
+        // For now, we'll just simulate it with some dummy data based on the ID
+        populateExpenseForm(expenseId);
+      }
+      
+      expenseModal.classList.add('lv-modal-open');
+    }
+    
+    function openDeleteModal(expenseId) {
+      document.getElementById('deleteExpenseId').value = expenseId;
+      deleteModal.classList.add('lv-modal-open');
+    }
+    
+    function closeAllModals() {
+      expenseModal.classList.remove('lv-modal-open');
+      categoryModal.classList.remove('lv-modal-open');
+      deleteModal.classList.remove('lv-modal-open');
+    }
+    
+    function populateExpenseForm(expenseId) {
+      // This is a simulation - in a real app, you would fetch this data from your database
+      const expenseData = {
+        '1': {
+          name: 'Schloss Elmau',
+          category: 'venue',
+          amount: 8000,
+          status: 'paid',
+          dueDate: '2025-03-15',
+          vendor: 'Schloss Elmau GmbH',
+          notes: 'Anzahlung für die Location'
+        },
+        '2': {
+          name: 'Gourmet Catering',
+          category: 'catering',
+          amount: 4500,
+          status: 'paid',
+          dueDate: '2025-04-01',
+          vendor: 'Gourmet Catering GmbH',
+          notes: 'Menü für 120 Personen'
+        },
+        '3': {
+          name: 'Getränke',
+          category: 'catering',
+          amount: 500,
+          status: 'paid',
+          dueDate: '2025-04-01',
+          vendor: 'Getränkeservice Müller',
+          notes: 'Wein und Sekt für den Empfang'
+        },
+        '4': {
+          name: 'Blumendekoration',
+          category: 'decoration',
+          amount: 1500,
+          status: 'paid',
+          dueDate: '2025-05-15',
+          vendor: 'Blumen Schmidt',
+          notes: 'Tisch- und Raumdekoration'
+        },
+        '5': {
+          name: 'Tischdekoration',
+          category: 'decoration',
+          amount: 500,
+          status: 'pending',
+          dueDate: '2025-06-01',
+          vendor: 'Deko & Co.',
+          notes: 'Kerzen, Tischläufer, etc.'
+        },
+        '6': {
+          name: 'Brautkleid',
+          category: 'attire',
+          amount: 1000,
+          status: 'paid',
+          dueDate: '2025-04-15',
+          vendor: 'Brautmoden Schneider',
+          notes: 'Inklusive Anpassungen'
+        },
+        '7': {
+          name: 'Accessoires',
+          category: 'attire',
+          amount: 250,
+          status: 'pending',
+          dueDate: '2025-05-01',
+          vendor: 'Brautmoden Schneider',
+          notes: 'Schleier und Schmuck'
+        }
+      };
+      
+      const expense = expenseData[expenseId];
+      if (expense) {
+        document.getElementById('expenseName').value = expense.name;
+        document.getElementById('expenseCategory').value = expense.category;
+        document.getElementById('expenseAmount').value = expense.amount;
+        document.getElementById('expenseStatus').value = expense.status;
+        document.getElementById('expenseDueDate').value = expense.dueDate;
+        document.getElementById('expenseVendor').value = expense.vendor;
+        document.getElementById('expenseNotes').value = expense.notes;
+      }
+    }
+    
+    function saveExpense() {
+      // Get form values
+      const expenseId = document.getElementById('expenseId').value;
+      const name = document.getElementById('expenseName').value;
+      const category = document.getElementById('expenseCategory').value;
+      const amount = document.getElementById('expenseAmount').value;
+      const status = document.getElementById('expenseStatus').value;
+      const dueDate = document.getElementById('expenseDueDate').value;
+      const vendor = document.getElementById('expenseVendor').value;
+      const notes = document.getElementById('expenseNotes').value;
+      
+      // Validate required fields
+      if (!name || !category || !amount) {
+        alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        return;
+      }
+      
+      // Here you would typically save the expense data to your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      const message = expenseId ? 'Ausgabe erfolgreich aktualisiert.' : 'Ausgabe erfolgreich hinzugefügt.';
+      showNotification(message, 'success');
+      
+      // In a real app, you would refresh the expense list or update the specific row
+    }
+    
+    function saveCategory() {
+      // Get form values
+      const name = document.getElementById('categoryName').value;
+      const icon = document.getElementById('categoryIcon').value;
+      const budget = document.getElementById('categoryBudget').value;
+      
+      // Validate required fields
+      if (!name || !budget) {
+        alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        return;
+      }
+      
+      // Here you would typically save the category data to your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      showNotification('Kategorie erfolgreich hinzugefügt.', 'success');
+      
+      // In a real app, you would add the new category to the UI
+    }
+    
+    function deleteExpense() {
+      const expenseId = document.getElementById('deleteExpenseId').value;
+      
+      // Here you would typically delete the expense from your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      showNotification('Ausgabe erfolgreich gelöscht.', 'success');
+      
+      // In a real app, you would remove the row from the table
+    }
+    
+    function updateTotalBudget() {
+      const totalBudget = document.getElementById('totalBudget').value;
+      
+      // Validate input
+      if (!totalBudget || isNaN(totalBudget) || totalBudget <= 0) {
+        alert('Bitte geben Sie einen gültigen Betrag ein.');
+        return;
+      }
+      
+      // Here you would typically update the total budget in your database
+      // For now, we'll just simulate a success message
+      showNotification('Gesamtbudget erfolgreich aktualisiert.', 'success');
+      
+      // In a real app, you would update the budget display and recalculate percentages
+    }
+    
+    function filterExpenses(type, value) {
+      const rows = document.querySelectorAll('#expenseTableBody tr');
+      
+      rows.forEach(row => {
+        if (value === 'all') {
+          row.style.display = '';
+        } else if (value === 'over-budget') {
+          // This would require actual budget data to implement properly
+          // For now, we'll just show all rows
+          row.style.display = '';
+        } else {
+          const rowValue = row.getAttribute(`data-${type}`);
+          if (rowValue === value) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+    }
+    
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `lv-notification lv-notification-${type}`;
+      notification.textContent = message;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('lv-notification-show');
+      }, 10);
+      
+      // Hide and remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('lv-notification-show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  });
+</script>

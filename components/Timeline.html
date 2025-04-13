@@ -1,0 +1,1175 @@
+<!-- LemonVows Timeline Component -->
+<div class="lv-timeline">
+  <div class="lv-container">
+    <!-- Header Section -->
+    <div class="lv-timeline-header lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-body lv-p-3">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <h2>Zeitplan & Checkliste</h2>
+              <p>Verfolgen Sie wichtige Meilensteine und Aufgaben für Ihre Hochzeit</p>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">25</div>
+                  <div class="lv-stat-label">Meilensteine</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">12</div>
+                  <div class="lv-stat-label">Erledigt</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-warning">8</div>
+                  <div class="lv-stat-label">In Bearbeitung</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-danger">5</div>
+                  <div class="lv-stat-label">Ausstehend</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- View Toggle -->
+    <div class="lv-view-toggle lv-mb-3">
+      <button class="lv-toggle-btn lv-toggle-active" data-view="timeline">Zeitplan</button>
+      <button class="lv-toggle-btn" data-view="checklist">Checkliste</button>
+    </div>
+    
+    <!-- Timeline View -->
+    <div class="lv-timeline-view" id="timelineView">
+      <!-- Timeline Header -->
+      <div class="lv-action-bar lv-mb-3">
+        <div class="lv-row">
+          <div class="lv-col lv-col-md-6">
+            <div class="lv-filter-group">
+              <button class="lv-filter-btn lv-filter-active" data-filter="all">Alle</button>
+              <button class="lv-filter-btn" data-filter="completed">Erledigt</button>
+              <button class="lv-filter-btn" data-filter="in-progress">In Bearbeitung</button>
+              <button class="lv-filter-btn" data-filter="pending">Ausstehend</button>
+            </div>
+          </div>
+          <div class="lv-col lv-col-md-6 lv-text-right">
+            <button class="lv-btn lv-btn-primary lv-add-milestone-btn">Meilenstein hinzufügen</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Timeline Content -->
+      <div class="lv-timeline-content">
+        <!-- 12+ Months Before -->
+        <div class="lv-timeline-section lv-mb-4">
+          <div class="lv-timeline-section-header">
+            <h3>12+ Monate vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 100%"></div>
+              </div>
+              <div class="lv-progress-label">100% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. August 2024</div>
+                <div class="lv-timeline-title">Hochzeitsdatum festlegen</div>
+                <div class="lv-timeline-description">Datum für die Hochzeit festgelegt: 15. August 2025</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="1">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">20. August 2024</div>
+                <div class="lv-timeline-title">Budget festlegen</div>
+                <div class="lv-timeline-description">Gesamtbudget von 25.000 € festgelegt</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="2">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. September 2024</div>
+                <div class="lv-timeline-title">Location buchen</div>
+                <div class="lv-timeline-description">Schloss Elmau als Hochzeitslocation gebucht</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="3">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 9-12 Months Before -->
+        <div class="lv-timeline-section lv-mb-4">
+          <div class="lv-timeline-section-header">
+            <h3>9-12 Monate vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 75%"></div>
+              </div>
+              <div class="lv-progress-label">75% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. September 2024</div>
+                <div class="lv-timeline-title">Gästeliste erstellen</div>
+                <div class="lv-timeline-description">Vorläufige Gästeliste mit 120 Personen erstellt</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="4">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. Oktober 2024</div>
+                <div class="lv-timeline-title">Catering buchen</div>
+                <div class="lv-timeline-description">Gourmet Catering für die Hochzeit gebucht</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="5">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Oktober 2024</div>
+                <div class="lv-timeline-title">Fotografen buchen</div>
+                <div class="lv-timeline-description">Fotograf für die Hochzeit noch nicht gebucht</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="6">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-in-progress" data-status="in-progress">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. November 2024</div>
+                <div class="lv-timeline-title">DJ/Band buchen</div>
+                <div class="lv-timeline-description">In Gesprächen mit verschiedenen DJs</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="7">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 6-9 Months Before -->
+        <div class="lv-timeline-section lv-mb-4">
+          <div class="lv-timeline-section-header">
+            <h3>6-9 Monate vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 50%"></div>
+              </div>
+              <div class="lv-progress-label">50% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. November 2024</div>
+                <div class="lv-timeline-title">Brautkleid aussuchen</div>
+                <div class="lv-timeline-description">Brautkleid bei Brautmoden Schneider ausgesucht</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="8">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. Dezember 2024</div>
+                <div class="lv-timeline-title">Anzug für den Bräutigam</div>
+                <div class="lv-timeline-description">Anzug noch nicht ausgesucht</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="9">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-in-progress" data-status="in-progress">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Dezember 2024</div>
+                <div class="lv-timeline-title">Blumendekoration planen</div>
+                <div class="lv-timeline-description">In Gesprächen mit Blumen Schmidt</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="10">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-in-progress" data-status="in-progress">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. Januar 2025</div>
+                <div class="lv-timeline-title">Save-the-Date versenden</div>
+                <div class="lv-timeline-description">Entwürfe in Arbeit</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="11">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 3-6 Months Before -->
+        <div class="lv-timeline-section lv-mb-4">
+          <div class="lv-timeline-section-header">
+            <h3>3-6 Monate vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 25%"></div>
+              </div>
+              <div class="lv-progress-label">25% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-completed" data-status="completed">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Februar 2025</div>
+                <div class="lv-timeline-title">Hochzeitstorte bestellen</div>
+                <div class="lv-timeline-description">Torte bei Konditorei Meyer bestellt</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="12">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-in-progress" data-status="in-progress">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. März 2025</div>
+                <div class="lv-timeline-title">Einladungen versenden</div>
+                <div class="lv-timeline-description">Einladungen in Produktion</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="13">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-in-progress" data-status="in-progress">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. März 2025</div>
+                <div class="lv-timeline-title">Trauringe aussuchen</div>
+                <div class="lv-timeline-description">Termin beim Juwelier vereinbart</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="14">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. April 2025</div>
+                <div class="lv-timeline-title">Menü festlegen</div>
+                <div class="lv-timeline-description">Termin mit Caterer noch nicht vereinbart</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="15">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 1-3 Months Before -->
+        <div class="lv-timeline-section lv-mb-4">
+          <div class="lv-timeline-section-header">
+            <h3>1-3 Monate vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 0%"></div>
+              </div>
+              <div class="lv-progress-label">0% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Mai 2025</div>
+                <div class="lv-timeline-title">Sitzplan erstellen</div>
+                <div class="lv-timeline-description">Noch nicht begonnen</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="16">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. Juni 2025</div>
+                <div class="lv-timeline-title">Ablaufplan erstellen</div>
+                <div class="lv-timeline-description">Noch nicht begonnen</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="17">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Juni 2025</div>
+                <div class="lv-timeline-title">Probetermin Frisur & Make-up</div>
+                <div class="lv-timeline-description">Noch nicht vereinbart</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="18">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Last Month -->
+        <div class="lv-timeline-section">
+          <div class="lv-timeline-section-header">
+            <h3>Letzter Monat vor der Hochzeit</h3>
+            <div class="lv-progress-container">
+              <div class="lv-progress-bar">
+                <div class="lv-progress-segment lv-progress-success" style="width: 0%"></div>
+              </div>
+              <div class="lv-progress-label">0% erledigt</div>
+            </div>
+          </div>
+          <div class="lv-timeline-items">
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">15. Juli 2025</div>
+                <div class="lv-timeline-title">Finale Gästezahl bestätigen</div>
+                <div class="lv-timeline-description">Noch nicht begonnen</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="19">✏️</button>
+                </div>
+              </div>
+            </div>
+            <div class="lv-timeline-item lv-timeline-pending" data-status="pending">
+              <div class="lv-timeline-marker"></div>
+              <div class="lv-timeline-content">
+                <div class="lv-timeline-date">1. August 2025</div>
+                <div class="lv-timeline-title">Letzte Anprobe</div>
+                <div class="lv-timeline-description">Noch nicht vereinbart</div>
+                <div class="lv-timeline-actions">
+                  <button class="lv-btn-icon lv-edit-milestone" data-id="20">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Checklist View (initially hidden) -->
+    <div class="lv-checklist-view" id="checklistView" style="display: none;">
+      <!-- Checklist Header -->
+      <div class="lv-action-bar lv-mb-3">
+        <div class="lv-row">
+          <div class="lv-col lv-col-md-6">
+            <div class="lv-filter-group">
+              <button class="lv-filter-btn lv-filter-active" data-filter="all">Alle</button>
+              <button class="lv-filter-btn" data-filter="completed">Erledigt</button>
+              <button class="lv-filter-btn" data-filter="pending">Offen</button>
+              <button class="lv-filter-btn lv-filter-warning" data-filter="high-priority">Hohe Priorität</button>
+            </div>
+          </div>
+          <div class="lv-col lv-col-md-6 lv-text-right">
+            <button class="lv-btn lv-btn-primary lv-add-task-btn">Aufgabe hinzufügen</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Checklist Content -->
+      <div class="lv-checklist-content">
+        <!-- Location Category -->
+        <div class="lv-checklist-category lv-mb-4">
+          <div class="lv-checklist-category-header" data-toggle="location">
+            <div class="lv-checklist-category-title">
+              <div class="lv-checklist-category-icon">🏰</div>
+              <h3>Location</h3>
+            </div>
+            <div class="lv-checklist-category-progress">
+              <div class="lv-progress-container">
+                <div class="lv-progress-bar lv-progress-sm">
+                  <div class="lv-progress-segment lv-progress-success" style="width: 100%"></div>
+                </div>
+              </div>
+              <div class="lv-progress-label">3/3 erledigt</div>
+              <div class="lv-checklist-toggle-icon">▼</div>
+            </div>
+          </div>
+          <div class="lv-checklist-category-tasks" id="location">
+            <div class="lv-task-item lv-task-completed" data-status="completed" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task1" class="lv-task-check" checked>
+                <label for="task1"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Locations recherchieren</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 15.08.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="1">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item lv-task-completed" data-status="completed" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task2" class="lv-task-check" checked>
+                <label for="task2"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Locations besichtigen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 25.08.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="2">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item lv-task-completed" data-status="completed" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task3" class="lv-task-check" checked>
+                <label for="task3"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Location buchen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 01.09.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="3">✏️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Catering Category -->
+        <div class="lv-checklist-category lv-mb-4">
+          <div class="lv-checklist-category-header" data-toggle="catering">
+            <div class="lv-checklist-category-title">
+              <div class="lv-checklist-category-icon">🍽️</div>
+              <h3>Catering</h3>
+            </div>
+            <div class="lv-checklist-category-progress">
+              <div class="lv-progress-container">
+                <div class="lv-progress-bar lv-progress-sm">
+                  <div class="lv-progress-segment lv-progress-success" style="width: 50%"></div>
+                </div>
+              </div>
+              <div class="lv-progress-label">1/2 erledigt</div>
+              <div class="lv-checklist-toggle-icon">▼</div>
+            </div>
+          </div>
+          <div class="lv-checklist-category-tasks" id="catering">
+            <div class="lv-task-item lv-task-completed" data-status="completed" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task4" class="lv-task-check" checked>
+                <label for="task4"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Caterer buchen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 01.10.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="4">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item" data-status="pending" data-priority="medium">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task5" class="lv-task-check">
+                <label for="task5"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Menü mit Caterer besprechen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 01.04.2025</span>
+                  <span class="lv-task-priority lv-priority-medium">Mittlere Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="5">✏️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Attire Category -->
+        <div class="lv-checklist-category lv-mb-4">
+          <div class="lv-checklist-category-header" data-toggle="attire">
+            <div class="lv-checklist-category-title">
+              <div class="lv-checklist-category-icon">👰</div>
+              <h3>Kleidung</h3>
+            </div>
+            <div class="lv-checklist-category-progress">
+              <div class="lv-progress-container">
+                <div class="lv-progress-bar lv-progress-sm">
+                  <div class="lv-progress-segment lv-progress-success" style="width: 33%"></div>
+                </div>
+              </div>
+              <div class="lv-progress-label">1/3 erledigt</div>
+              <div class="lv-checklist-toggle-icon">▼</div>
+            </div>
+          </div>
+          <div class="lv-checklist-category-tasks" id="attire">
+            <div class="lv-task-item lv-task-completed" data-status="completed" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task6" class="lv-task-check" checked>
+                <label for="task6"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Brautkleid aussuchen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 15.11.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="6">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item" data-status="pending" data-priority="high">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task7" class="lv-task-check">
+                <label for="task7"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Anzug für den Bräutigam aussuchen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 01.12.2024</span>
+                  <span class="lv-task-priority lv-priority-high">Hohe Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="7">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item" data-status="pending" data-priority="medium">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task8" class="lv-task-check">
+                <label for="task8"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Accessoires aussuchen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 15.12.2024</span>
+                  <span class="lv-task-priority lv-priority-medium">Mittlere Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="8">✏️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Decoration Category -->
+        <div class="lv-checklist-category lv-mb-4">
+          <div class="lv-checklist-category-header" data-toggle="decoration">
+            <div class="lv-checklist-category-title">
+              <div class="lv-checklist-category-icon">💐</div>
+              <h3>Dekoration</h3>
+            </div>
+            <div class="lv-checklist-category-progress">
+              <div class="lv-progress-container">
+                <div class="lv-progress-bar lv-progress-sm">
+                  <div class="lv-progress-segment lv-progress-success" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="lv-progress-label">0/2 erledigt</div>
+              <div class="lv-checklist-toggle-icon">▼</div>
+            </div>
+          </div>
+          <div class="lv-checklist-category-tasks" id="decoration">
+            <div class="lv-task-item" data-status="pending" data-priority="medium">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task9" class="lv-task-check">
+                <label for="task9"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Blumendekoration planen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 15.12.2024</span>
+                  <span class="lv-task-priority lv-priority-medium">Mittlere Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="9">✏️</button>
+              </div>
+            </div>
+            <div class="lv-task-item" data-status="pending" data-priority="low">
+              <div class="lv-task-checkbox">
+                <input type="checkbox" id="task10" class="lv-task-check">
+                <label for="task10"></label>
+              </div>
+              <div class="lv-task-content">
+                <div class="lv-task-title">Tischdekoration planen</div>
+                <div class="lv-task-details">
+                  <span class="lv-task-date">Fällig: 01.01.2025</span>
+                  <span class="lv-task-priority lv-priority-low">Niedrige Priorität</span>
+                </div>
+              </div>
+              <div class="lv-task-actions">
+                <button class="lv-btn-icon lv-edit-task" data-id="10">✏️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Milestone Modal -->
+<div class="lv-modal" id="milestoneModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3 id="milestoneModalTitle">Meilenstein hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="milestoneForm">
+          <input type="hidden" id="milestoneId" value="">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="milestoneTitle">Titel*</label>
+            <input type="text" class="lv-form-control" id="milestoneTitle" required placeholder="Titel des Meilensteins">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="milestoneDate">Datum*</label>
+            <input type="date" class="lv-form-control" id="milestoneDate" required>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="milestoneDescription">Beschreibung</label>
+            <textarea class="lv-form-control" id="milestoneDescription" rows="3" placeholder="Beschreibung des Meilensteins"></textarea>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="milestoneStatus">Status</label>
+            <select class="lv-form-control" id="milestoneStatus">
+              <option value="pending">Ausstehend</option>
+              <option value="in-progress">In Bearbeitung</option>
+              <option value="completed">Erledigt</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="milestoneCategory">Zeitraum</label>
+            <select class="lv-form-control" id="milestoneCategory">
+              <option value="12-plus">12+ Monate vor der Hochzeit</option>
+              <option value="9-12">9-12 Monate vor der Hochzeit</option>
+              <option value="6-9">6-9 Monate vor der Hochzeit</option>
+              <option value="3-6">3-6 Monate vor der Hochzeit</option>
+              <option value="1-3">1-3 Monate vor der Hochzeit</option>
+              <option value="last-month">Letzter Monat vor der Hochzeit</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveMilestoneBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="lv-modal" id="taskModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3 id="taskModalTitle">Aufgabe hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="taskForm">
+          <input type="hidden" id="taskId" value="">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskTitle">Titel*</label>
+            <input type="text" class="lv-form-control" id="taskTitle" required placeholder="Titel der Aufgabe">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskCategory">Kategorie*</label>
+            <select class="lv-form-control" id="taskCategory" required>
+              <option value="">Bitte wählen</option>
+              <option value="location">Location</option>
+              <option value="catering">Catering</option>
+              <option value="attire">Kleidung</option>
+              <option value="decoration">Dekoration</option>
+              <option value="photography">Fotografie</option>
+              <option value="music">Musik</option>
+              <option value="stationery">Papeterie</option>
+              <option value="other">Sonstiges</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskDueDate">Fälligkeitsdatum*</label>
+            <input type="date" class="lv-form-control" id="taskDueDate" required>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskPriority">Priorität</label>
+            <select class="lv-form-control" id="taskPriority">
+              <option value="low">Niedrig</option>
+              <option value="medium" selected>Mittel</option>
+              <option value="high">Hoch</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskStatus">Status</label>
+            <select class="lv-form-control" id="taskStatus">
+              <option value="pending">Offen</option>
+              <option value="completed">Erledigt</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="taskNotes">Notizen</label>
+            <textarea class="lv-form-control" id="taskNotes" rows="3" placeholder="Zusätzliche Informationen"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveTaskBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // View toggle functionality
+    const toggleBtns = document.querySelectorAll('.lv-toggle-btn');
+    const timelineView = document.getElementById('timelineView');
+    const checklistView = document.getElementById('checklistView');
+    
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        toggleBtns.forEach(b => b.classList.remove('lv-toggle-active'));
+        // Add active class to clicked button
+        this.classList.add('lv-toggle-active');
+        
+        const view = this.getAttribute('data-view');
+        if (view === 'timeline') {
+          timelineView.style.display = '';
+          checklistView.style.display = 'none';
+        } else if (view === 'checklist') {
+          timelineView.style.display = 'none';
+          checklistView.style.display = '';
+        }
+      });
+    });
+    
+    // Checklist category toggle
+    const categoryHeaders = document.querySelectorAll('.lv-checklist-category-header');
+    categoryHeaders.forEach(header => {
+      header.addEventListener('click', function() {
+        const categoryId = this.getAttribute('data-toggle');
+        const categoryTasks = document.getElementById(categoryId);
+        
+        if (categoryTasks.style.display === 'none') {
+          categoryTasks.style.display = '';
+          this.querySelector('.lv-checklist-toggle-icon').textContent = '▼';
+        } else {
+          categoryTasks.style.display = 'none';
+          this.querySelector('.lv-checklist-toggle-icon').textContent = '▶';
+        }
+      });
+    });
+    
+    // Modal functionality
+    const milestoneModal = document.getElementById('milestoneModal');
+    const taskModal = document.getElementById('taskModal');
+    const addMilestoneBtn = document.querySelector('.lv-add-milestone-btn');
+    const addTaskBtn = document.querySelector('.lv-add-task-btn');
+    const modalCloseButtons = document.querySelectorAll('.lv-modal-close, .lv-modal-cancel');
+    const saveMilestoneBtn = document.getElementById('saveMilestoneBtn');
+    const saveTaskBtn = document.getElementById('saveTaskBtn');
+    
+    // Open add milestone modal
+    if (addMilestoneBtn) {
+      addMilestoneBtn.addEventListener('click', function() {
+        openMilestoneModal();
+      });
+    }
+    
+    // Open add task modal
+    if (addTaskBtn) {
+      addTaskBtn.addEventListener('click', function() {
+        openTaskModal();
+      });
+    }
+    
+    // Close modals
+    modalCloseButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        closeAllModals();
+      });
+    });
+    
+    // Edit milestone buttons
+    const editMilestoneButtons = document.querySelectorAll('.lv-edit-milestone');
+    editMilestoneButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const milestoneId = this.getAttribute('data-id');
+        openMilestoneModal(milestoneId);
+      });
+    });
+    
+    // Edit task buttons
+    const editTaskButtons = document.querySelectorAll('.lv-edit-task');
+    editTaskButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const taskId = this.getAttribute('data-id');
+        openTaskModal(taskId);
+      });
+    });
+    
+    // Save milestone
+    if (saveMilestoneBtn) {
+      saveMilestoneBtn.addEventListener('click', function() {
+        saveMilestone();
+      });
+    }
+    
+    // Save task
+    if (saveTaskBtn) {
+      saveTaskBtn.addEventListener('click', function() {
+        saveTask();
+      });
+    }
+    
+    // Task checkbox functionality
+    const taskChecks = document.querySelectorAll('.lv-task-check');
+    taskChecks.forEach(check => {
+      check.addEventListener('change', function() {
+        const taskItem = this.closest('.lv-task-item');
+        if (this.checked) {
+          taskItem.classList.add('lv-task-completed');
+          taskItem.setAttribute('data-status', 'completed');
+          // Here you would typically update the task status in your database
+        } else {
+          taskItem.classList.remove('lv-task-completed');
+          taskItem.setAttribute('data-status', 'pending');
+        }
+      });
+    });
+    
+    // Filter buttons for timeline
+    const timelineFilterButtons = document.querySelectorAll('#timelineView .lv-filter-btn');
+    timelineFilterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        timelineFilterButtons.forEach(btn => btn.classList.remove('lv-filter-active'));
+        // Add active class to clicked button
+        this.classList.add('lv-filter-active');
+        
+        const filter = this.getAttribute('data-filter');
+        filterTimelineItems(filter);
+      });
+    });
+    
+    // Filter buttons for checklist
+    const checklistFilterButtons = document.querySelectorAll('#checklistView .lv-filter-btn');
+    checklistFilterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        checklistFilterButtons.forEach(btn => btn.classList.remove('lv-filter-active'));
+        // Add active class to clicked button
+        this.classList.add('lv-filter-active');
+        
+        const filter = this.getAttribute('data-filter');
+        filterChecklistItems(filter);
+      });
+    });
+    
+    // Functions
+    function openMilestoneModal(milestoneId = null) {
+      // Reset form
+      document.getElementById('milestoneForm').reset();
+      document.getElementById('milestoneId').value = '';
+      document.getElementById('milestoneModalTitle').textContent = 'Meilenstein hinzufügen';
+      
+      if (milestoneId) {
+        // Edit mode - populate form with milestone data
+        document.getElementById('milestoneModalTitle').textContent = 'Meilenstein bearbeiten';
+        document.getElementById('milestoneId').value = milestoneId;
+        
+        // Here you would typically fetch the milestone data from your database
+        // For now, we'll just simulate it with some dummy data based on the ID
+        populateMilestoneForm(milestoneId);
+      }
+      
+      milestoneModal.classList.add('lv-modal-open');
+    }
+    
+    function openTaskModal(taskId = null) {
+      // Reset form
+      document.getElementById('taskForm').reset();
+      document.getElementById('taskId').value = '';
+      document.getElementById('taskModalTitle').textContent = 'Aufgabe hinzufügen';
+      
+      if (taskId) {
+        // Edit mode - populate form with task data
+        document.getElementById('taskModalTitle').textContent = 'Aufgabe bearbeiten';
+        document.getElementById('taskId').value = taskId;
+        
+        // Here you would typically fetch the task data from your database
+        // For now, we'll just simulate it with some dummy data based on the ID
+        populateTaskForm(taskId);
+      }
+      
+      taskModal.classList.add('lv-modal-open');
+    }
+    
+    function closeAllModals() {
+      milestoneModal.classList.remove('lv-modal-open');
+      taskModal.classList.remove('lv-modal-open');
+    }
+    
+    function populateMilestoneForm(milestoneId) {
+      // This is a simulation - in a real app, you would fetch this data from your database
+      const milestoneData = {
+        '1': {
+          title: 'Hochzeitsdatum festlegen',
+          date: '2024-08-15',
+          description: 'Datum für die Hochzeit festgelegt: 15. August 2025',
+          status: 'completed',
+          category: '12-plus'
+        },
+        '2': {
+          title: 'Budget festlegen',
+          date: '2024-08-20',
+          description: 'Gesamtbudget von 25.000 € festgelegt',
+          status: 'completed',
+          category: '12-plus'
+        },
+        '3': {
+          title: 'Location buchen',
+          date: '2024-09-01',
+          description: 'Schloss Elmau als Hochzeitslocation gebucht',
+          status: 'completed',
+          category: '12-plus'
+        },
+        '4': {
+          title: 'Gästeliste erstellen',
+          date: '2024-09-15',
+          description: 'Vorläufige Gästeliste mit 120 Personen erstellt',
+          status: 'completed',
+          category: '9-12'
+        },
+        '5': {
+          title: 'Catering buchen',
+          date: '2024-10-01',
+          description: 'Gourmet Catering für die Hochzeit gebucht',
+          status: 'completed',
+          category: '9-12'
+        }
+      };
+      
+      const milestone = milestoneData[milestoneId];
+      if (milestone) {
+        document.getElementById('milestoneTitle').value = milestone.title;
+        document.getElementById('milestoneDate').value = milestone.date;
+        document.getElementById('milestoneDescription').value = milestone.description;
+        document.getElementById('milestoneStatus').value = milestone.status;
+        document.getElementById('milestoneCategory').value = milestone.category;
+      }
+    }
+    
+    function populateTaskForm(taskId) {
+      // This is a simulation - in a real app, you would fetch this data from your database
+      const taskData = {
+        '1': {
+          title: 'Locations recherchieren',
+          category: 'location',
+          dueDate: '2024-08-15',
+          priority: 'high',
+          status: 'completed',
+          notes: 'Verschiedene Locations in der Umgebung recherchieren'
+        },
+        '2': {
+          title: 'Locations besichtigen',
+          category: 'location',
+          dueDate: '2024-08-25',
+          priority: 'high',
+          status: 'completed',
+          notes: 'Termine für Besichtigungen vereinbaren'
+        },
+        '3': {
+          title: 'Location buchen',
+          category: 'location',
+          dueDate: '2024-09-01',
+          priority: 'high',
+          status: 'completed',
+          notes: 'Vertrag unterschreiben und Anzahlung leisten'
+        },
+        '4': {
+          title: 'Caterer buchen',
+          category: 'catering',
+          dueDate: '2024-10-01',
+          priority: 'high',
+          status: 'completed',
+          notes: 'Verschiedene Angebote einholen und vergleichen'
+        },
+        '5': {
+          title: 'Menü mit Caterer besprechen',
+          category: 'catering',
+          dueDate: '2025-04-01',
+          priority: 'medium',
+          status: 'pending',
+          notes: 'Termin für Menübesprechung und Probeessen vereinbaren'
+        }
+      };
+      
+      const task = taskData[taskId];
+      if (task) {
+        document.getElementById('taskTitle').value = task.title;
+        document.getElementById('taskCategory').value = task.category;
+        document.getElementById('taskDueDate').value = task.dueDate;
+        document.getElementById('taskPriority').value = task.priority;
+        document.getElementById('taskStatus').value = task.status;
+        document.getElementById('taskNotes').value = task.notes;
+      }
+    }
+    
+    function saveMilestone() {
+      // Get form values
+      const milestoneId = document.getElementById('milestoneId').value;
+      const title = document.getElementById('milestoneTitle').value;
+      const date = document.getElementById('milestoneDate').value;
+      const description = document.getElementById('milestoneDescription').value;
+      const status = document.getElementById('milestoneStatus').value;
+      const category = document.getElementById('milestoneCategory').value;
+      
+      // Validate required fields
+      if (!title || !date) {
+        alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        return;
+      }
+      
+      // Here you would typically save the milestone data to your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      const message = milestoneId ? 'Meilenstein erfolgreich aktualisiert.' : 'Meilenstein erfolgreich hinzugefügt.';
+      showNotification(message, 'success');
+      
+      // In a real app, you would refresh the milestone list or update the specific item
+    }
+    
+    function saveTask() {
+      // Get form values
+      const taskId = document.getElementById('taskId').value;
+      const title = document.getElementById('taskTitle').value;
+      const category = document.getElementById('taskCategory').value;
+      const dueDate = document.getElementById('taskDueDate').value;
+      const priority = document.getElementById('taskPriority').value;
+      const status = document.getElementById('taskStatus').value;
+      const notes = document.getElementById('taskNotes').value;
+      
+      // Validate required fields
+      if (!title || !category || !dueDate) {
+        alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        return;
+      }
+      
+      // Here you would typically save the task data to your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      const message = taskId ? 'Aufgabe erfolgreich aktualisiert.' : 'Aufgabe erfolgreich hinzugefügt.';
+      showNotification(message, 'success');
+      
+      // In a real app, you would refresh the task list or update the specific item
+    }
+    
+    function filterTimelineItems(filter) {
+      const items = document.querySelectorAll('.lv-timeline-item');
+      
+      items.forEach(item => {
+        if (filter === 'all') {
+          item.style.display = '';
+        } else {
+          const status = item.getAttribute('data-status');
+          if (status === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    }
+    
+    function filterChecklistItems(filter) {
+      const items = document.querySelectorAll('.lv-task-item');
+      
+      items.forEach(item => {
+        if (filter === 'all') {
+          item.style.display = '';
+        } else if (filter === 'high-priority') {
+          const priority = item.getAttribute('data-priority');
+          if (priority === 'high') {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        } else {
+          const status = item.getAttribute('data-status');
+          if (status === filter) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        }
+      });
+    }
+    
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `lv-notification lv-notification-${type}`;
+      notification.textContent = message;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('lv-notification-show');
+      }, 10);
+      
+      // Hide and remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('lv-notification-show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  });
+</script>

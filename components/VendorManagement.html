@@ -1,0 +1,990 @@
+<!-- LemonVows VendorManagement Component -->
+<div class="lv-vendor-management">
+  <div class="lv-container">
+    <!-- Header Section -->
+    <div class="lv-vendor-header lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-body lv-p-3">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <h2>Dienstleister-Management</h2>
+              <p>Verwalten Sie alle Dienstleister für Ihre Hochzeit an einem Ort</p>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">15</div>
+                  <div class="lv-stat-label">Dienstleister</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">8</div>
+                  <div class="lv-stat-label">Gebucht</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-warning">4</div>
+                  <div class="lv-stat-label">In Kontakt</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-danger">3</div>
+                  <div class="lv-stat-label">Offen</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Bar -->
+    <div class="lv-action-bar lv-mb-3">
+      <div class="lv-row">
+        <div class="lv-col lv-col-md-6">
+          <div class="lv-filter-group">
+            <button class="lv-filter-btn lv-filter-active" data-filter="all">Alle</button>
+            <button class="lv-filter-btn" data-filter="booked">Gebucht</button>
+            <button class="lv-filter-btn" data-filter="contacted">In Kontakt</button>
+            <button class="lv-filter-btn" data-filter="pending">Offen</button>
+          </div>
+        </div>
+        <div class="lv-col lv-col-md-6 lv-text-right">
+          <div class="lv-search-container lv-mb-2">
+            <input type="text" class="lv-search-input" id="vendorSearch" placeholder="Dienstleister suchen...">
+          </div>
+          <button class="lv-btn lv-btn-primary" id="addVendorBtn">Dienstleister hinzufügen</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Category Filter -->
+    <div class="lv-category-filter lv-mb-3">
+      <button class="lv-category-btn lv-category-active" data-category="all">Alle Kategorien</button>
+      <button class="lv-category-btn" data-category="venue">Location</button>
+      <button class="lv-category-btn" data-category="catering">Catering</button>
+      <button class="lv-category-btn" data-category="photography">Fotografie</button>
+      <button class="lv-category-btn" data-category="music">Musik</button>
+      <button class="lv-category-btn" data-category="decoration">Dekoration</button>
+    </div>
+    
+    <!-- Vendor Cards -->
+    <div class="lv-vendor-grid">
+      <!-- Venue Card -->
+      <div class="lv-vendor-card" data-vendor-id="1" data-category="venue" data-status="booked">
+        <div class="lv-vendor-card-header">
+          <div class="lv-vendor-category">Location</div>
+          <div class="lv-vendor-status lv-status-booked">Gebucht</div>
+        </div>
+        <div class="lv-vendor-card-body">
+          <h3 class="lv-vendor-name">Schloss Elmau</h3>
+          <div class="lv-vendor-contact">
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Kontakt:</span>
+              <span class="lv-contact-value">Frau Müller</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Telefon:</span>
+              <span class="lv-contact-value">+49 123 456789</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">E-Mail:</span>
+              <span class="lv-contact-value">info@schloss-elmau.de</span>
+            </div>
+          </div>
+          <div class="lv-vendor-price">
+            <span class="lv-price-label">Preis:</span>
+            <span class="lv-price-value">€€€€</span>
+          </div>
+          <div class="lv-vendor-notes">
+            <p>Vertrag unterschrieben am 01.09.2024. Anzahlung von 5.000 € geleistet.</p>
+          </div>
+        </div>
+        <div class="lv-vendor-card-footer">
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-view-vendor-btn" data-vendor-id="1">Details</button>
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-edit-vendor-btn" data-vendor-id="1">Bearbeiten</button>
+        </div>
+      </div>
+      
+      <!-- Catering Card -->
+      <div class="lv-vendor-card" data-vendor-id="2" data-category="catering" data-status="booked">
+        <div class="lv-vendor-card-header">
+          <div class="lv-vendor-category">Catering</div>
+          <div class="lv-vendor-status lv-status-booked">Gebucht</div>
+        </div>
+        <div class="lv-vendor-card-body">
+          <h3 class="lv-vendor-name">Gourmet Catering</h3>
+          <div class="lv-vendor-contact">
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Kontakt:</span>
+              <span class="lv-contact-value">Herr Schmidt</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Telefon:</span>
+              <span class="lv-contact-value">+49 987 654321</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">E-Mail:</span>
+              <span class="lv-contact-value">info@gourmet-catering.de</span>
+            </div>
+          </div>
+          <div class="lv-vendor-price">
+            <span class="lv-price-label">Preis:</span>
+            <span class="lv-price-value">€€€</span>
+          </div>
+          <div class="lv-vendor-notes">
+            <p>Vertrag unterschrieben am 01.10.2024. Menüverkostung am 15.03.2025 geplant.</p>
+          </div>
+        </div>
+        <div class="lv-vendor-card-footer">
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-view-vendor-btn" data-vendor-id="2">Details</button>
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-edit-vendor-btn" data-vendor-id="2">Bearbeiten</button>
+        </div>
+      </div>
+      
+      <!-- Photography Card -->
+      <div class="lv-vendor-card" data-vendor-id="3" data-category="photography" data-status="contacted">
+        <div class="lv-vendor-card-header">
+          <div class="lv-vendor-category">Fotografie</div>
+          <div class="lv-vendor-status lv-status-contacted">In Kontakt</div>
+        </div>
+        <div class="lv-vendor-card-body">
+          <h3 class="lv-vendor-name">Moments Photography</h3>
+          <div class="lv-vendor-contact">
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Kontakt:</span>
+              <span class="lv-contact-value">Frau Weber</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Telefon:</span>
+              <span class="lv-contact-value">+49 555 123456</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">E-Mail:</span>
+              <span class="lv-contact-value">info@moments-photography.de</span>
+            </div>
+          </div>
+          <div class="lv-vendor-price">
+            <span class="lv-price-label">Preis:</span>
+            <span class="lv-price-value">€€</span>
+          </div>
+          <div class="lv-vendor-notes">
+            <p>Angebot angefordert am 15.10.2024. Termin für Kennenlerngespräch vereinbaren.</p>
+          </div>
+        </div>
+        <div class="lv-vendor-card-footer">
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-view-vendor-btn" data-vendor-id="3">Details</button>
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-edit-vendor-btn" data-vendor-id="3">Bearbeiten</button>
+        </div>
+      </div>
+      
+      <!-- Music Card -->
+      <div class="lv-vendor-card" data-vendor-id="4" data-category="music" data-status="contacted">
+        <div class="lv-vendor-card-header">
+          <div class="lv-vendor-category">Musik</div>
+          <div class="lv-vendor-status lv-status-contacted">In Kontakt</div>
+        </div>
+        <div class="lv-vendor-card-body">
+          <h3 class="lv-vendor-name">DJ Groove</h3>
+          <div class="lv-vendor-contact">
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Kontakt:</span>
+              <span class="lv-contact-value">Herr Becker</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Telefon:</span>
+              <span class="lv-contact-value">+49 333 777888</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">E-Mail:</span>
+              <span class="lv-contact-value">info@dj-groove.de</span>
+            </div>
+          </div>
+          <div class="lv-vendor-price">
+            <span class="lv-price-label">Preis:</span>
+            <span class="lv-price-value">€€</span>
+          </div>
+          <div class="lv-vendor-notes">
+            <p>Angebot erhalten am 01.11.2024. Songwünsche zusammenstellen.</p>
+          </div>
+        </div>
+        <div class="lv-vendor-card-footer">
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-view-vendor-btn" data-vendor-id="4">Details</button>
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-edit-vendor-btn" data-vendor-id="4">Bearbeiten</button>
+        </div>
+      </div>
+      
+      <!-- Decoration Card -->
+      <div class="lv-vendor-card" data-vendor-id="5" data-category="decoration" data-status="pending">
+        <div class="lv-vendor-card-header">
+          <div class="lv-vendor-category">Dekoration</div>
+          <div class="lv-vendor-status lv-status-pending">Offen</div>
+        </div>
+        <div class="lv-vendor-card-body">
+          <h3 class="lv-vendor-name">Blumen Schmidt</h3>
+          <div class="lv-vendor-contact">
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Kontakt:</span>
+              <span class="lv-contact-value">Frau Schmidt</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">Telefon:</span>
+              <span class="lv-contact-value">+49 222 444666</span>
+            </div>
+            <div class="lv-contact-item">
+              <span class="lv-contact-label">E-Mail:</span>
+              <span class="lv-contact-value">info@blumen-schmidt.de</span>
+            </div>
+          </div>
+          <div class="lv-vendor-price">
+            <span class="lv-price-label">Preis:</span>
+            <span class="lv-price-value">€€</span>
+          </div>
+          <div class="lv-vendor-notes">
+            <p>Noch nicht kontaktiert. Termin für Beratungsgespräch vereinbaren.</p>
+          </div>
+        </div>
+        <div class="lv-vendor-card-footer">
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-view-vendor-btn" data-vendor-id="5">Details</button>
+          <button class="lv-btn lv-btn-sm lv-btn-outline lv-edit-vendor-btn" data-vendor-id="5">Bearbeiten</button>
+        </div>
+      </div>
+      
+      <!-- More vendor cards would be added here -->
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Vendor Modal -->
+<div class="lv-modal" id="vendorModal">
+  <div class="lv-modal-dialog lv-modal-lg">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3 id="vendorModalTitle">Dienstleister hinzufügen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="vendorForm">
+          <input type="hidden" id="vendorId" value="">
+          
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorName">Name*</label>
+                <input type="text" class="lv-form-control" id="vendorName" required placeholder="Name des Dienstleisters">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorCategory">Kategorie*</label>
+                <select class="lv-form-control" id="vendorCategory" required>
+                  <option value="">Bitte wählen</option>
+                  <option value="venue">Location</option>
+                  <option value="catering">Catering</option>
+                  <option value="photography">Fotografie</option>
+                  <option value="music">Musik</option>
+                  <option value="decoration">Dekoration</option>
+                  <option value="cake">Hochzeitstorte</option>
+                  <option value="transportation">Transport</option>
+                  <option value="attire">Kleidung</option>
+                  <option value="beauty">Friseur & Make-up</option>
+                  <option value="other">Sonstiges</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="contactPerson">Kontaktperson</label>
+                <input type="text" class="lv-form-control" id="contactPerson" placeholder="Name der Kontaktperson">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorStatus">Status</label>
+                <select class="lv-form-control" id="vendorStatus">
+                  <option value="pending">Offen</option>
+                  <option value="contacted">In Kontakt</option>
+                  <option value="quote">Angebot erhalten</option>
+                  <option value="booked">Gebucht</option>
+                  <option value="rejected">Abgelehnt</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorPhone">Telefon</label>
+                <input type="tel" class="lv-form-control" id="vendorPhone" placeholder="Telefonnummer">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorEmail">E-Mail</label>
+                <input type="email" class="lv-form-control" id="vendorEmail" placeholder="E-Mail-Adresse">
+              </div>
+            </div>
+          </div>
+          
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorWebsite">Website</label>
+                <input type="url" class="lv-form-control" id="vendorWebsite" placeholder="Website-URL">
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-form-group">
+                <label class="lv-form-label" for="vendorPrice">Preiskategorie</label>
+                <select class="lv-form-control" id="vendorPrice">
+                  <option value="€">€ (günstig)</option>
+                  <option value="€€">€€ (mittel)</option>
+                  <option value="€€€">€€€ (gehoben)</option>
+                  <option value="€€€€">€€€€ (luxus)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="vendorAddress">Adresse</label>
+            <textarea class="lv-form-control" id="vendorAddress" rows="2" placeholder="Vollständige Adresse"></textarea>
+          </div>
+          
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="vendorNotes">Notizen</label>
+            <textarea class="lv-form-control" id="vendorNotes" rows="3" placeholder="Zusätzliche Informationen, Gesprächsnotizen, etc."></textarea>
+          </div>
+          
+          <div class="lv-form-group">
+            <label class="lv-form-label">Dokumente</label>
+            <div class="lv-file-upload">
+              <input type="file" id="vendorDocuments" multiple class="lv-file-input">
+              <label for="vendorDocuments" class="lv-file-label">
+                <span class="lv-file-icon">📎</span>
+                <span class="lv-file-text">Dateien auswählen</span>
+              </label>
+            </div>
+            <div class="lv-file-list" id="documentList"></div>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveVendorBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Vendor Details Modal -->
+<div class="lv-modal" id="vendorDetailsModal">
+  <div class="lv-modal-dialog lv-modal-lg">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3 id="vendorDetailsTitle">Dienstleister Details</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <div class="lv-vendor-details">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Kategorie:</div>
+                <div class="lv-detail-value" id="detailCategory">Location</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Status:</div>
+                <div class="lv-detail-value" id="detailStatus">Gebucht</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Kontaktperson:</div>
+                <div class="lv-detail-value" id="detailContact">Frau Müller</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Telefon:</div>
+                <div class="lv-detail-value" id="detailPhone">+49 123 456789</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">E-Mail:</div>
+                <div class="lv-detail-value" id="detailEmail">info@schloss-elmau.de</div>
+              </div>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Website:</div>
+                <div class="lv-detail-value" id="detailWebsite">www.schloss-elmau.de</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Preiskategorie:</div>
+                <div class="lv-detail-value" id="detailPrice">€€€€</div>
+              </div>
+              <div class="lv-detail-group">
+                <div class="lv-detail-label">Adresse:</div>
+                <div class="lv-detail-value" id="detailAddress">Schloss Elmau, 82493 Krün</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="lv-detail-group">
+            <div class="lv-detail-label">Notizen:</div>
+            <div class="lv-detail-value" id="detailNotes">
+              <p>Vertrag unterschrieben am 01.09.2024. Anzahlung von 5.000 € geleistet.</p>
+              <p>Besichtigung am 15.08.2024 durchgeführt. Sehr schöne Location mit tollem Ausblick.</p>
+            </div>
+          </div>
+          
+          <div class="lv-detail-group">
+            <div class="lv-detail-label">Dokumente:</div>
+            <div class="lv-detail-value" id="detailDocuments">
+              <ul class="lv-document-list">
+                <li class="lv-document-item">
+                  <span class="lv-document-icon">📄</span>
+                  <span class="lv-document-name">Vertrag_Schloss_Elmau.pdf</span>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline">Öffnen</button>
+                </li>
+                <li class="lv-document-item">
+                  <span class="lv-document-icon">📄</span>
+                  <span class="lv-document-name">Rechnung_Anzahlung.pdf</span>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline">Öffnen</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="lv-detail-group">
+            <div class="lv-detail-label">Kommunikationsverlauf:</div>
+            <div class="lv-detail-value">
+              <div class="lv-communication-timeline" id="detailCommunication">
+                <div class="lv-communication-item">
+                  <div class="lv-communication-date">15.08.2024</div>
+                  <div class="lv-communication-content">
+                    <div class="lv-communication-title">Besichtigung</div>
+                    <div class="lv-communication-text">Besichtigung durchgeführt. Sehr schöne Location mit tollem Ausblick.</div>
+                  </div>
+                </div>
+                <div class="lv-communication-item">
+                  <div class="lv-communication-date">20.08.2024</div>
+                  <div class="lv-communication-content">
+                    <div class="lv-communication-title">Angebot erhalten</div>
+                    <div class="lv-communication-text">Angebot über 15.000 € für die Hochzeitsfeier erhalten.</div>
+                  </div>
+                </div>
+                <div class="lv-communication-item">
+                  <div class="lv-communication-date">01.09.2024</div>
+                  <div class="lv-communication-content">
+                    <div class="lv-communication-title">Vertrag unterschrieben</div>
+                    <div class="lv-communication-text">Vertrag unterschrieben und Anzahlung von 5.000 € geleistet.</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="lv-add-communication">
+                <textarea class="lv-form-control" id="newCommunication" rows="2" placeholder="Neue Kommunikation hinzufügen..."></textarea>
+                <button class="lv-btn lv-btn-sm lv-btn-primary" id="addCommunicationBtn">Hinzufügen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-btn-danger" id="deleteVendorBtn">Löschen</button>
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Schließen</button>
+        <button class="lv-btn lv-btn-primary" id="editVendorFromDetailsBtn">Bearbeiten</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const vendorSearch = document.getElementById('vendorSearch');
+    const addVendorBtn = document.getElementById('addVendorBtn');
+    const vendorCards = document.querySelectorAll('.lv-vendor-card');
+    const filterBtns = document.querySelectorAll('.lv-filter-btn');
+    const categoryBtns = document.querySelectorAll('.lv-category-btn');
+    const viewVendorBtns = document.querySelectorAll('.lv-view-vendor-btn');
+    const editVendorBtns = document.querySelectorAll('.lv-edit-vendor-btn');
+    const vendorModal = document.getElementById('vendorModal');
+    const vendorDetailsModal = document.getElementById('vendorDetailsModal');
+    const vendorForm = document.getElementById('vendorForm');
+    const saveVendorBtn = document.getElementById('saveVendorBtn');
+    const deleteVendorBtn = document.getElementById('deleteVendorBtn');
+    const editVendorFromDetailsBtn = document.getElementById('editVendorFromDetailsBtn');
+    const addCommunicationBtn = document.getElementById('addCommunicationBtn');
+    const modalCloseButtons = document.querySelectorAll('.lv-modal-close, .lv-modal-cancel');
+    
+    // Initialize
+    initSearch();
+    initFilters();
+    initButtons();
+    initModals();
+    
+    // Functions
+    function initSearch() {
+      if (vendorSearch) {
+        vendorSearch.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          
+          vendorCards.forEach(card => {
+            const vendorName = card.querySelector('.lv-vendor-name').textContent.toLowerCase();
+            const vendorCategory = card.querySelector('.lv-vendor-category').textContent.toLowerCase();
+            const vendorNotes = card.querySelector('.lv-vendor-notes').textContent.toLowerCase();
+            
+            if (vendorName.includes(searchTerm) || vendorCategory.includes(searchTerm) || vendorNotes.includes(searchTerm)) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      }
+    }
+    
+    function initFilters() {
+      // Status filters
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons
+          filterBtns.forEach(b => b.classList.remove('lv-filter-active'));
+          // Add active class to clicked button
+          this.classList.add('lv-filter-active');
+          
+          const filter = this.getAttribute('data-filter');
+          filterVendors();
+        });
+      });
+      
+      // Category filters
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons
+          categoryBtns.forEach(b => b.classList.remove('lv-category-active'));
+          // Add active class to clicked button
+          this.classList.add('lv-category-active');
+          
+          const category = this.getAttribute('data-category');
+          filterVendors();
+        });
+      });
+    }
+    
+    function filterVendors() {
+      const activeStatusFilter = document.querySelector('.lv-filter-btn.lv-filter-active').getAttribute('data-filter');
+      const activeCategoryFilter = document.querySelector('.lv-category-btn.lv-category-active').getAttribute('data-category');
+      
+      vendorCards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        const cardCategory = card.getAttribute('data-category');
+        
+        const statusMatch = activeStatusFilter === 'all' || cardStatus === activeStatusFilter;
+        const categoryMatch = activeCategoryFilter === 'all' || cardCategory === activeCategoryFilter;
+        
+        if (statusMatch && categoryMatch) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+    
+    function initButtons() {
+      // Add vendor button
+      if (addVendorBtn) {
+        addVendorBtn.addEventListener('click', function() {
+          openVendorModal();
+        });
+      }
+      
+      // View vendor buttons
+      viewVendorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const vendorId = this.getAttribute('data-vendor-id');
+          openVendorDetailsModal(vendorId);
+        });
+      });
+      
+      // Edit vendor buttons
+      editVendorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const vendorId = this.getAttribute('data-vendor-id');
+          openVendorModal(vendorId);
+        });
+      });
+      
+      // Edit vendor from details button
+      if (editVendorFromDetailsBtn) {
+        editVendorFromDetailsBtn.addEventListener('click', function() {
+          const vendorId = document.getElementById('vendorDetailsTitle').getAttribute('data-vendor-id');
+          closeAllModals();
+          openVendorModal(vendorId);
+        });
+      }
+      
+      // Delete vendor button
+      if (deleteVendorBtn) {
+        deleteVendorBtn.addEventListener('click', function() {
+          const vendorId = document.getElementById('vendorDetailsTitle').getAttribute('data-vendor-id');
+          if (confirm('Sind Sie sicher, dass Sie diesen Dienstleister löschen möchten?')) {
+            deleteVendor(vendorId);
+          }
+        });
+      }
+      
+      // Add communication button
+      if (addCommunicationBtn) {
+        addCommunicationBtn.addEventListener('click', function() {
+          addCommunication();
+        });
+      }
+    }
+    
+    function initModals() {
+      // Close modals
+      modalCloseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          closeAllModals();
+        });
+      });
+      
+      // Save vendor button
+      if (saveVendorBtn) {
+        saveVendorBtn.addEventListener('click', function() {
+          saveVendor();
+        });
+      }
+      
+      // File input change
+      const fileInput = document.getElementById('vendorDocuments');
+      if (fileInput) {
+        fileInput.addEventListener('change', function() {
+          updateFileList(this.files);
+        });
+      }
+    }
+    
+    function openVendorModal(vendorId = null) {
+      // Reset form
+      vendorForm.reset();
+      document.getElementById('vendorId').value = '';
+      document.getElementById('vendorModalTitle').textContent = 'Dienstleister hinzufügen';
+      document.getElementById('documentList').innerHTML = '';
+      
+      if (vendorId) {
+        // Edit mode - populate form with vendor data
+        document.getElementById('vendorModalTitle').textContent = 'Dienstleister bearbeiten';
+        document.getElementById('vendorId').value = vendorId;
+        
+        // Here you would typically fetch the vendor data from your database
+        // For now, we'll just simulate it with some dummy data based on the ID
+        populateVendorForm(vendorId);
+      }
+      
+      vendorModal.classList.add('lv-modal-open');
+    }
+    
+    function openVendorDetailsModal(vendorId) {
+      // Here you would typically fetch the vendor data from your database
+      // For now, we'll just simulate it with some dummy data based on the ID
+      populateVendorDetails(vendorId);
+      
+      document.getElementById('vendorDetailsTitle').textContent = 'Dienstleister Details';
+      document.getElementById('vendorDetailsTitle').setAttribute('data-vendor-id', vendorId);
+      
+      vendorDetailsModal.classList.add('lv-modal-open');
+    }
+    
+    function closeAllModals() {
+      vendorModal.classList.remove('lv-modal-open');
+      vendorDetailsModal.classList.remove('lv-modal-open');
+    }
+    
+    function populateVendorForm(vendorId) {
+      // This is a simulation - in a real app, you would fetch this data from your database
+      const vendorData = {
+        '1': {
+          name: 'Schloss Elmau',
+          category: 'venue',
+          contactPerson: 'Frau Müller',
+          status: 'booked',
+          phone: '+49 123 456789',
+          email: 'info@schloss-elmau.de',
+          website: 'www.schloss-elmau.de',
+          price: '€€€€',
+          address: 'Schloss Elmau, 82493 Krün',
+          notes: 'Vertrag unterschrieben am 01.09.2024. Anzahlung von 5.000 € geleistet.'
+        },
+        '2': {
+          name: 'Gourmet Catering',
+          category: 'catering',
+          contactPerson: 'Herr Schmidt',
+          status: 'booked',
+          phone: '+49 987 654321',
+          email: 'info@gourmet-catering.de',
+          website: 'www.gourmet-catering.de',
+          price: '€€€',
+          address: 'Hauptstraße 123, 80331 München',
+          notes: 'Vertrag unterschrieben am 01.10.2024. Menüverkostung am 15.03.2025 geplant.'
+        },
+        '3': {
+          name: 'Moments Photography',
+          category: 'photography',
+          contactPerson: 'Frau Weber',
+          status: 'contacted',
+          phone: '+49 555 123456',
+          email: 'info@moments-photography.de',
+          website: 'www.moments-photography.de',
+          price: '€€',
+          address: 'Fotografenweg 42, 80331 München',
+          notes: 'Angebot angefordert am 15.10.2024. Termin für Kennenlerngespräch vereinbaren.'
+        }
+      };
+      
+      const vendor = vendorData[vendorId];
+      if (vendor) {
+        document.getElementById('vendorName').value = vendor.name;
+        document.getElementById('vendorCategory').value = vendor.category;
+        document.getElementById('contactPerson').value = vendor.contactPerson;
+        document.getElementById('vendorStatus').value = vendor.status;
+        document.getElementById('vendorPhone').value = vendor.phone;
+        document.getElementById('vendorEmail').value = vendor.email;
+        document.getElementById('vendorWebsite').value = vendor.website;
+        document.getElementById('vendorPrice').value = vendor.price;
+        document.getElementById('vendorAddress').value = vendor.address;
+        document.getElementById('vendorNotes').value = vendor.notes;
+      }
+    }
+    
+    function populateVendorDetails(vendorId) {
+      // This is a simulation - in a real app, you would fetch this data from your database
+      const vendorData = {
+        '1': {
+          name: 'Schloss Elmau',
+          category: 'Location',
+          status: 'Gebucht',
+          contactPerson: 'Frau Müller',
+          phone: '+49 123 456789',
+          email: 'info@schloss-elmau.de',
+          website: 'www.schloss-elmau.de',
+          price: '€€€€',
+          address: 'Schloss Elmau, 82493 Krün',
+          notes: 'Vertrag unterschrieben am 01.09.2024. Anzahlung von 5.000 € geleistet.\nBesichtigung am 15.08.2024 durchgeführt. Sehr schöne Location mit tollem Ausblick.',
+          documents: [
+            { name: 'Vertrag_Schloss_Elmau.pdf', type: 'pdf' },
+            { name: 'Rechnung_Anzahlung.pdf', type: 'pdf' }
+          ],
+          communication: [
+            { date: '15.08.2024', title: 'Besichtigung', text: 'Besichtigung durchgeführt. Sehr schöne Location mit tollem Ausblick.' },
+            { date: '20.08.2024', title: 'Angebot erhalten', text: 'Angebot über 15.000 € für die Hochzeitsfeier erhalten.' },
+            { date: '01.09.2024', title: 'Vertrag unterschrieben', text: 'Vertrag unterschrieben und Anzahlung von 5.000 € geleistet.' }
+          ]
+        },
+        '2': {
+          name: 'Gourmet Catering',
+          category: 'Catering',
+          status: 'Gebucht',
+          contactPerson: 'Herr Schmidt',
+          phone: '+49 987 654321',
+          email: 'info@gourmet-catering.de',
+          website: 'www.gourmet-catering.de',
+          price: '€€€',
+          address: 'Hauptstraße 123, 80331 München',
+          notes: 'Vertrag unterschrieben am 01.10.2024. Menüverkostung am 15.03.2025 geplant.',
+          documents: [
+            { name: 'Vertrag_Gourmet_Catering.pdf', type: 'pdf' },
+            { name: 'Menüvorschläge.pdf', type: 'pdf' }
+          ],
+          communication: [
+            { date: '15.09.2024', title: 'Erstkontakt', text: 'Anfrage per E-Mail gesendet.' },
+            { date: '20.09.2024', title: 'Angebot erhalten', text: 'Angebot über 8.000 € für 120 Personen erhalten.' },
+            { date: '01.10.2024', title: 'Vertrag unterschrieben', text: 'Vertrag unterschrieben und Anzahlung von 2.000 € geleistet.' }
+          ]
+        },
+        '3': {
+          name: 'Moments Photography',
+          category: 'Fotografie',
+          status: 'In Kontakt',
+          contactPerson: 'Frau Weber',
+          phone: '+49 555 123456',
+          email: 'info@moments-photography.de',
+          website: 'www.moments-photography.de',
+          price: '€€',
+          address: 'Fotografenweg 42, 80331 München',
+          notes: 'Angebot angefordert am 15.10.2024. Termin für Kennenlerngespräch vereinbaren.',
+          documents: [
+            { name: 'Portfolio_Moments_Photography.pdf', type: 'pdf' }
+          ],
+          communication: [
+            { date: '15.10.2024', title: 'Erstkontakt', text: 'Anfrage per E-Mail gesendet.' },
+            { date: '18.10.2024', title: 'Antwort erhalten', text: 'Antwort erhalten mit Portfolio und Preisliste.' }
+          ]
+        }
+      };
+      
+      const vendor = vendorData[vendorId];
+      if (vendor) {
+        document.getElementById('vendorDetailsTitle').textContent = vendor.name;
+        document.getElementById('detailCategory').textContent = vendor.category;
+        document.getElementById('detailStatus').textContent = vendor.status;
+        document.getElementById('detailContact').textContent = vendor.contactPerson;
+        document.getElementById('detailPhone').textContent = vendor.phone;
+        document.getElementById('detailEmail').textContent = vendor.email;
+        document.getElementById('detailWebsite').textContent = vendor.website;
+        document.getElementById('detailPrice').textContent = vendor.price;
+        document.getElementById('detailAddress').textContent = vendor.address;
+        document.getElementById('detailNotes').innerHTML = vendor.notes.replace(/\n/g, '<p>');
+        
+        // Documents
+        let documentsHTML = '<ul class="lv-document-list">';
+        vendor.documents.forEach(doc => {
+          documentsHTML += `
+            <li class="lv-document-item">
+              <span class="lv-document-icon">📄</span>
+              <span class="lv-document-name">${doc.name}</span>
+              <button class="lv-btn lv-btn-sm lv-btn-outline">Öffnen</button>
+            </li>
+          `;
+        });
+        documentsHTML += '</ul>';
+        document.getElementById('detailDocuments').innerHTML = documentsHTML;
+        
+        // Communication
+        let communicationHTML = '';
+        vendor.communication.forEach(comm => {
+          communicationHTML += `
+            <div class="lv-communication-item">
+              <div class="lv-communication-date">${comm.date}</div>
+              <div class="lv-communication-content">
+                <div class="lv-communication-title">${comm.title}</div>
+                <div class="lv-communication-text">${comm.text}</div>
+              </div>
+            </div>
+          `;
+        });
+        document.getElementById('detailCommunication').innerHTML = communicationHTML;
+      }
+    }
+    
+    function saveVendor() {
+      // Get form values
+      const vendorId = document.getElementById('vendorId').value;
+      const name = document.getElementById('vendorName').value;
+      const category = document.getElementById('vendorCategory').value;
+      
+      // Validate required fields
+      if (!name || !category) {
+        alert('Bitte füllen Sie alle Pflichtfelder aus.');
+        return;
+      }
+      
+      // Here you would typically save the vendor data to your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      const message = vendorId ? 'Dienstleister erfolgreich aktualisiert.' : 'Dienstleister erfolgreich hinzugefügt.';
+      showNotification(message, 'success');
+      
+      // In a real app, you would refresh the vendor list or update the specific card
+    }
+    
+    function deleteVendor(vendorId) {
+      // Here you would typically delete the vendor from your database
+      // For now, we'll just close the modal and simulate a success message
+      closeAllModals();
+      
+      // Show success message
+      showNotification('Dienstleister erfolgreich gelöscht.', 'success');
+      
+      // In a real app, you would remove the vendor card from the list
+      const vendorCard = document.querySelector(`.lv-vendor-card[data-vendor-id="${vendorId}"]`);
+      if (vendorCard) {
+        vendorCard.remove();
+      }
+    }
+    
+    function addCommunication() {
+      const newCommunicationText = document.getElementById('newCommunication').value;
+      
+      if (!newCommunicationText) {
+        return;
+      }
+      
+      // Get current date
+      const today = new Date();
+      const date = today.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '.');
+      
+      // Create new communication item
+      const newItem = document.createElement('div');
+      newItem.className = 'lv-communication-item';
+      newItem.innerHTML = `
+        <div class="lv-communication-date">${date}</div>
+        <div class="lv-communication-content">
+          <div class="lv-communication-title">Neue Kommunikation</div>
+          <div class="lv-communication-text">${newCommunicationText}</div>
+        </div>
+      `;
+      
+      // Add to communication timeline
+      document.getElementById('detailCommunication').appendChild(newItem);
+      
+      // Clear input
+      document.getElementById('newCommunication').value = '';
+      
+      // Show success message
+      showNotification('Kommunikation erfolgreich hinzugefügt.', 'success');
+    }
+    
+    function updateFileList(files) {
+      const documentList = document.getElementById('documentList');
+      documentList.innerHTML = '';
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileItem = document.createElement('div');
+        fileItem.className = 'lv-file-item';
+        fileItem.innerHTML = `
+          <span class="lv-file-icon">📄</span>
+          <span class="lv-file-name">${file.name}</span>
+          <span class="lv-file-size">${formatFileSize(file.size)}</span>
+        `;
+        documentList.appendChild(fileItem);
+      }
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `lv-notification lv-notification-${type}`;
+      notification.textContent = message;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('lv-notification-show');
+      }, 10);
+      
+      // Hide and remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('lv-notification-show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  });
+</script>

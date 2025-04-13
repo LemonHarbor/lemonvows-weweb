@@ -1,0 +1,1041 @@
+<!-- LemonVows TablePlanner Component -->
+<div class="lv-table-planner">
+  <div class="lv-container">
+    <!-- Header Section -->
+    <div class="lv-table-planner-header lv-mb-3">
+      <div class="lv-card">
+        <div class="lv-card-body lv-p-3">
+          <div class="lv-row">
+            <div class="lv-col lv-col-md-6">
+              <h2>Tischplaner</h2>
+              <p>Erstellen Sie Ihre perfekte Sitzordnung für die Hochzeitsfeier</p>
+            </div>
+            <div class="lv-col lv-col-md-6">
+              <div class="lv-stats-container">
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">120</div>
+                  <div class="lv-stat-label">Gäste gesamt</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-success">85</div>
+                  <div class="lv-stat-label">Platziert</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value lv-text-warning">35</div>
+                  <div class="lv-stat-label">Nicht platziert</div>
+                </div>
+                <div class="lv-stat-item">
+                  <div class="lv-stat-value">12</div>
+                  <div class="lv-stat-label">Tische</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="lv-row">
+      <!-- Control Panel -->
+      <div class="lv-col lv-col-md-3">
+        <div class="lv-control-panel lv-mb-3">
+          <div class="lv-card">
+            <div class="lv-card-header">
+              <h3>Steuerung</h3>
+            </div>
+            <div class="lv-card-body">
+              <div class="lv-control-section lv-mb-3">
+                <h4>Tische</h4>
+                <div class="lv-btn-group lv-mb-2">
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addRoundTableBtn">Rund</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addRectTableBtn">Rechteckig</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addOvalTableBtn">Oval</button>
+                </div>
+                <div class="lv-form-group lv-mb-2">
+                  <label class="lv-form-label">Tischgröße</label>
+                  <select class="lv-form-control" id="tableSize">
+                    <option value="small">Klein (6 Personen)</option>
+                    <option value="medium" selected>Mittel (8 Personen)</option>
+                    <option value="large">Groß (10 Personen)</option>
+                    <option value="xl">Sehr groß (12 Personen)</option>
+                  </select>
+                </div>
+                <div class="lv-form-group">
+                  <label class="lv-form-label">Tischfarbe</label>
+                  <div class="lv-color-picker">
+                    <div class="lv-color-option lv-color-active" data-color="#ffffff" style="background-color: #ffffff;"></div>
+                    <div class="lv-color-option" data-color="#f8e9e9" style="background-color: #f8e9e9;"></div>
+                    <div class="lv-color-option" data-color="#e9f8f2" style="background-color: #e9f8f2;"></div>
+                    <div class="lv-color-option" data-color="#e9eef8" style="background-color: #e9eef8;"></div>
+                    <div class="lv-color-option" data-color="#f8f6e9" style="background-color: #f8f6e9;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="lv-control-section lv-mb-3">
+                <h4>Raumelemente</h4>
+                <div class="lv-btn-group lv-mb-2">
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addDanceFloorBtn">Tanzfläche</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addBarBtn">Bar</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="addStageBtn">Bühne</button>
+                </div>
+              </div>
+              
+              <div class="lv-control-section">
+                <h4>Aktionen</h4>
+                <div class="lv-btn-group lv-mb-2">
+                  <button class="lv-btn lv-btn-sm lv-btn-outline lv-btn-danger" id="deleteSelectedBtn">Löschen</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="clearAllBtn">Alles zurücksetzen</button>
+                </div>
+                <div class="lv-btn-group">
+                  <button class="lv-btn lv-btn-sm lv-btn-primary" id="saveLayoutBtn">Layout speichern</button>
+                  <button class="lv-btn lv-btn-sm lv-btn-outline" id="printLayoutBtn">Drucken</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Guest List Panel -->
+        <div class="lv-guest-panel">
+          <div class="lv-card">
+            <div class="lv-card-header">
+              <h3>Gästeliste</h3>
+              <div class="lv-search-container">
+                <input type="text" class="lv-search-input" id="guestSearch" placeholder="Gäste suchen...">
+              </div>
+            </div>
+            <div class="lv-card-body">
+              <div class="lv-guest-filter lv-mb-2">
+                <button class="lv-filter-btn lv-filter-active" data-filter="unassigned">Nicht platziert</button>
+                <button class="lv-filter-btn" data-filter="all">Alle Gäste</button>
+              </div>
+              <div class="lv-guest-list" id="guestList">
+                <!-- Unassigned Guests -->
+                <div class="lv-guest-item" draggable="true" data-guest-id="1">
+                  <div class="lv-guest-name">Anna Schmidt</div>
+                  <div class="lv-guest-info">Familie der Braut</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="2">
+                  <div class="lv-guest-name">Thomas Müller</div>
+                  <div class="lv-guest-info">Familie des Bräutigams</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="3">
+                  <div class="lv-guest-name">Julia Weber</div>
+                  <div class="lv-guest-info">Freundin der Braut</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="4">
+                  <div class="lv-guest-name">Michael Schneider</div>
+                  <div class="lv-guest-info">Freund des Bräutigams</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="5">
+                  <div class="lv-guest-name">Sarah Fischer</div>
+                  <div class="lv-guest-info">Kollegin der Braut</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="6">
+                  <div class="lv-guest-name">Markus Wagner</div>
+                  <div class="lv-guest-info">Kollege des Bräutigams</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="7">
+                  <div class="lv-guest-name">Laura Becker</div>
+                  <div class="lv-guest-info">Cousine der Braut</div>
+                </div>
+                <div class="lv-guest-item" draggable="true" data-guest-id="8">
+                  <div class="lv-guest-name">Daniel Hoffmann</div>
+                  <div class="lv-guest-info">Cousin des Bräutigams</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Floor Plan -->
+      <div class="lv-col lv-col-md-9">
+        <div class="lv-floor-plan-container">
+          <div class="lv-card">
+            <div class="lv-card-header">
+              <h3>Raumplan</h3>
+              <div class="lv-view-controls">
+                <button class="lv-btn lv-btn-sm lv-btn-outline" id="zoomInBtn">+</button>
+                <button class="lv-btn lv-btn-sm lv-btn-outline" id="zoomOutBtn">-</button>
+                <button class="lv-btn lv-btn-sm lv-btn-outline" id="resetViewBtn">Reset</button>
+              </div>
+            </div>
+            <div class="lv-card-body">
+              <div class="lv-floor-plan" id="floorPlan">
+                <!-- This is where tables and elements will be added dynamically -->
+                
+                <!-- Example Round Table -->
+                <div class="lv-table lv-table-round" data-table-id="1" style="left: 100px; top: 150px;">
+                  <div class="lv-table-number">1</div>
+                  <div class="lv-table-capacity">8 Plätze</div>
+                  <div class="lv-table-guests">
+                    <!-- Seats will be added dynamically -->
+                    <div class="lv-seat" data-seat-id="1-1" data-guest-id="">
+                      <div class="lv-seat-number">1</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-2" data-guest-id="">
+                      <div class="lv-seat-number">2</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-3" data-guest-id="">
+                      <div class="lv-seat-number">3</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-4" data-guest-id="">
+                      <div class="lv-seat-number">4</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-5" data-guest-id="">
+                      <div class="lv-seat-number">5</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-6" data-guest-id="">
+                      <div class="lv-seat-number">6</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-7" data-guest-id="">
+                      <div class="lv-seat-number">7</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="1-8" data-guest-id="">
+                      <div class="lv-seat-number">8</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Example Rectangular Table -->
+                <div class="lv-table lv-table-rect" data-table-id="2" style="left: 300px; top: 150px;">
+                  <div class="lv-table-number">2</div>
+                  <div class="lv-table-capacity">8 Plätze</div>
+                  <div class="lv-table-guests">
+                    <!-- Seats will be added dynamically -->
+                    <div class="lv-seat" data-seat-id="2-1" data-guest-id="">
+                      <div class="lv-seat-number">1</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-2" data-guest-id="">
+                      <div class="lv-seat-number">2</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-3" data-guest-id="">
+                      <div class="lv-seat-number">3</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-4" data-guest-id="">
+                      <div class="lv-seat-number">4</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-5" data-guest-id="">
+                      <div class="lv-seat-number">5</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-6" data-guest-id="">
+                      <div class="lv-seat-number">6</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-7" data-guest-id="">
+                      <div class="lv-seat-number">7</div>
+                    </div>
+                    <div class="lv-seat" data-seat-id="2-8" data-guest-id="">
+                      <div class="lv-seat-number">8</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Example Dance Floor -->
+                <div class="lv-room-element lv-dance-floor" data-element-id="df1" style="left: 200px; top: 300px;">
+                  <div class="lv-element-label">Tanzfläche</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table Properties Modal -->
+<div class="lv-modal" id="tablePropertiesModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3>Tischeigenschaften</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="tablePropertiesForm">
+          <input type="hidden" id="tableId" value="">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="tableName">Tischname/Nummer</label>
+            <input type="text" class="lv-form-control" id="tableName" placeholder="z.B. 1, 2, A, B oder 'Brautpaar'">
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="tableCapacity">Kapazität</label>
+            <select class="lv-form-control" id="tableCapacity">
+              <option value="6">6 Personen</option>
+              <option value="8" selected>8 Personen</option>
+              <option value="10">10 Personen</option>
+              <option value="12">12 Personen</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label">Tischfarbe</label>
+            <div class="lv-color-picker">
+              <div class="lv-color-option lv-color-active" data-color="#ffffff" style="background-color: #ffffff;"></div>
+              <div class="lv-color-option" data-color="#f8e9e9" style="background-color: #f8e9e9;"></div>
+              <div class="lv-color-option" data-color="#e9f8f2" style="background-color: #e9f8f2;"></div>
+              <div class="lv-color-option" data-color="#e9eef8" style="background-color: #e9eef8;"></div>
+              <div class="lv-color-option" data-color="#f8f6e9" style="background-color: #f8f6e9;"></div>
+            </div>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label">Tischnotizen</label>
+            <textarea class="lv-form-control" id="tableNotes" rows="3" placeholder="Zusätzliche Informationen zum Tisch"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="saveTablePropertiesBtn">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Guest Assignment Modal -->
+<div class="lv-modal" id="guestAssignmentModal">
+  <div class="lv-modal-dialog">
+    <div class="lv-modal-content">
+      <div class="lv-modal-header">
+        <h3>Gast zuweisen</h3>
+        <button class="lv-modal-close">&times;</button>
+      </div>
+      <div class="lv-modal-body">
+        <form id="guestAssignmentForm">
+          <input type="hidden" id="seatId" value="">
+          <div class="lv-form-group">
+            <label class="lv-form-label" for="guestSelect">Gast auswählen</label>
+            <select class="lv-form-control" id="guestSelect">
+              <option value="">-- Bitte wählen --</option>
+              <option value="1">Anna Schmidt</option>
+              <option value="2">Thomas Müller</option>
+              <option value="3">Julia Weber</option>
+              <option value="4">Michael Schneider</option>
+              <option value="5">Sarah Fischer</option>
+              <option value="6">Markus Wagner</option>
+              <option value="7">Laura Becker</option>
+              <option value="8">Daniel Hoffmann</option>
+            </select>
+          </div>
+          <div class="lv-form-group">
+            <label class="lv-form-label">Sitzplatznotizen</label>
+            <textarea class="lv-form-control" id="seatNotes" rows="3" placeholder="Besondere Anforderungen oder Notizen"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-btn lv-btn-outline lv-btn-danger" id="removeGuestBtn">Gast entfernen</button>
+        <button class="lv-btn lv-btn-outline lv-modal-cancel">Abbrechen</button>
+        <button class="lv-btn lv-btn-primary" id="assignGuestBtn">Zuweisen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const floorPlan = document.getElementById('floorPlan');
+    const guestList = document.getElementById('guestList');
+    const guestSearch = document.getElementById('guestSearch');
+    const addRoundTableBtn = document.getElementById('addRoundTableBtn');
+    const addRectTableBtn = document.getElementById('addRectTableBtn');
+    const addOvalTableBtn = document.getElementById('addOvalTableBtn');
+    const addDanceFloorBtn = document.getElementById('addDanceFloorBtn');
+    const addBarBtn = document.getElementById('addBarBtn');
+    const addStageBtn = document.getElementById('addStageBtn');
+    const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const saveLayoutBtn = document.getElementById('saveLayoutBtn');
+    const printLayoutBtn = document.getElementById('printLayoutBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const resetViewBtn = document.getElementById('resetViewBtn');
+    const tablePropertiesModal = document.getElementById('tablePropertiesModal');
+    const guestAssignmentModal = document.getElementById('guestAssignmentModal');
+    const tablePropertiesForm = document.getElementById('tablePropertiesForm');
+    const guestAssignmentForm = document.getElementById('guestAssignmentForm');
+    const saveTablePropertiesBtn = document.getElementById('saveTablePropertiesBtn');
+    const assignGuestBtn = document.getElementById('assignGuestBtn');
+    const removeGuestBtn = document.getElementById('removeGuestBtn');
+    const colorOptions = document.querySelectorAll('.lv-color-option');
+    const guestFilterBtns = document.querySelectorAll('.lv-guest-filter .lv-filter-btn');
+    
+    // Variables
+    let selectedElement = null;
+    let draggedGuest = null;
+    let nextTableId = 3; // Starting from 3 since we have 2 example tables
+    let nextElementId = 2; // Starting from 2 since we have 1 example element
+    let scale = 1;
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
+    
+    // Initialize
+    initDragAndDrop();
+    initTableInteractions();
+    initGuestInteractions();
+    initModalInteractions();
+    initControlButtons();
+    
+    // Functions
+    function initDragAndDrop() {
+      // Make tables draggable
+      const tables = document.querySelectorAll('.lv-table');
+      tables.forEach(table => {
+        makeElementDraggable(table);
+      });
+      
+      // Make room elements draggable
+      const roomElements = document.querySelectorAll('.lv-room-element');
+      roomElements.forEach(element => {
+        makeElementDraggable(element);
+      });
+      
+      // Make guests draggable
+      const guests = document.querySelectorAll('.lv-guest-item');
+      guests.forEach(guest => {
+        guest.addEventListener('dragstart', handleGuestDragStart);
+        guest.addEventListener('dragend', handleGuestDragEnd);
+      });
+      
+      // Make seats droppable
+      const seats = document.querySelectorAll('.lv-seat');
+      seats.forEach(seat => {
+        seat.addEventListener('dragover', handleSeatDragOver);
+        seat.addEventListener('drop', handleSeatDrop);
+        seat.addEventListener('click', handleSeatClick);
+      });
+    }
+    
+    function makeElementDraggable(element) {
+      element.addEventListener('mousedown', function(e) {
+        if (e.target === element || e.target.parentNode === element) {
+          selectElement(element);
+          
+          isDragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = parseInt(element.style.left) || 0;
+          startTop = parseInt(element.style.top) || 0;
+          
+          e.preventDefault();
+        }
+      });
+    }
+    
+    function initTableInteractions() {
+      // Table selection
+      const tables = document.querySelectorAll('.lv-table');
+      tables.forEach(table => {
+        table.addEventListener('click', function(e) {
+          if (e.target.classList.contains('lv-seat') || e.target.parentNode.classList.contains('lv-seat')) {
+            // Seat click is handled separately
+            return;
+          }
+          selectElement(table);
+          e.stopPropagation();
+        });
+        
+        // Double click to open properties
+        table.addEventListener('dblclick', function(e) {
+          if (e.target.classList.contains('lv-seat') || e.target.parentNode.classList.contains('lv-seat')) {
+            // Seat double click is handled separately
+            return;
+          }
+          openTablePropertiesModal(table);
+          e.stopPropagation();
+        });
+      });
+      
+      // Floor plan click (deselect)
+      floorPlan.addEventListener('click', function(e) {
+        if (e.target === floorPlan) {
+          deselectAll();
+        }
+      });
+      
+      // Floor plan mouse move (drag)
+      document.addEventListener('mousemove', function(e) {
+        if (isDragging && selectedElement) {
+          const dx = (e.clientX - startX) / scale;
+          const dy = (e.clientY - startY) / scale;
+          
+          selectedElement.style.left = (startLeft + dx) + 'px';
+          selectedElement.style.top = (startTop + dy) + 'px';
+        }
+      });
+      
+      // Floor plan mouse up (end drag)
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+    }
+    
+    function initGuestInteractions() {
+      // Guest search
+      guestSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const guests = document.querySelectorAll('.lv-guest-item');
+        
+        guests.forEach(guest => {
+          const guestName = guest.querySelector('.lv-guest-name').textContent.toLowerCase();
+          const guestInfo = guest.querySelector('.lv-guest-info').textContent.toLowerCase();
+          
+          if (guestName.includes(searchTerm) || guestInfo.includes(searchTerm)) {
+            guest.style.display = '';
+          } else {
+            guest.style.display = 'none';
+          }
+        });
+      });
+      
+      // Guest filter
+      guestFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          guestFilterBtns.forEach(b => b.classList.remove('lv-filter-active'));
+          this.classList.add('lv-filter-active');
+          
+          const filter = this.getAttribute('data-filter');
+          filterGuests(filter);
+        });
+      });
+    }
+    
+    function initModalInteractions() {
+      // Close modals
+      const modalCloseButtons = document.querySelectorAll('.lv-modal-close, .lv-modal-cancel');
+      modalCloseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          closeAllModals();
+        });
+      });
+      
+      // Save table properties
+      if (saveTablePropertiesBtn) {
+        saveTablePropertiesBtn.addEventListener('click', function() {
+          saveTableProperties();
+        });
+      }
+      
+      // Assign guest
+      if (assignGuestBtn) {
+        assignGuestBtn.addEventListener('click', function() {
+          assignGuest();
+        });
+      }
+      
+      // Remove guest
+      if (removeGuestBtn) {
+        removeGuestBtn.addEventListener('click', function() {
+          removeGuest();
+        });
+      }
+      
+      // Color picker
+      colorOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const colorPicker = this.closest('.lv-color-picker');
+          const options = colorPicker.querySelectorAll('.lv-color-option');
+          
+          options.forEach(opt => opt.classList.remove('lv-color-active'));
+          this.classList.add('lv-color-active');
+        });
+      });
+    }
+    
+    function initControlButtons() {
+      // Add round table
+      if (addRoundTableBtn) {
+        addRoundTableBtn.addEventListener('click', function() {
+          addTable('round');
+        });
+      }
+      
+      // Add rectangular table
+      if (addRectTableBtn) {
+        addRectTableBtn.addEventListener('click', function() {
+          addTable('rect');
+        });
+      }
+      
+      // Add oval table
+      if (addOvalTableBtn) {
+        addOvalTableBtn.addEventListener('click', function() {
+          addTable('oval');
+        });
+      }
+      
+      // Add dance floor
+      if (addDanceFloorBtn) {
+        addDanceFloorBtn.addEventListener('click', function() {
+          addRoomElement('dance-floor', 'Tanzfläche');
+        });
+      }
+      
+      // Add bar
+      if (addBarBtn) {
+        addBarBtn.addEventListener('click', function() {
+          addRoomElement('bar', 'Bar');
+        });
+      }
+      
+      // Add stage
+      if (addStageBtn) {
+        addStageBtn.addEventListener('click', function() {
+          addRoomElement('stage', 'Bühne');
+        });
+      }
+      
+      // Delete selected
+      if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', function() {
+          deleteSelected();
+        });
+      }
+      
+      // Clear all
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function() {
+          if (confirm('Sind Sie sicher, dass Sie den gesamten Raumplan zurücksetzen möchten?')) {
+            clearAll();
+          }
+        });
+      }
+      
+      // Save layout
+      if (saveLayoutBtn) {
+        saveLayoutBtn.addEventListener('click', function() {
+          saveLayout();
+        });
+      }
+      
+      // Print layout
+      if (printLayoutBtn) {
+        printLayoutBtn.addEventListener('click', function() {
+          printLayout();
+        });
+      }
+      
+      // Zoom in
+      if (zoomInBtn) {
+        zoomInBtn.addEventListener('click', function() {
+          zoomIn();
+        });
+      }
+      
+      // Zoom out
+      if (zoomOutBtn) {
+        zoomOutBtn.addEventListener('click', function() {
+          zoomOut();
+        });
+      }
+      
+      // Reset view
+      if (resetViewBtn) {
+        resetViewBtn.addEventListener('click', function() {
+          resetView();
+        });
+      }
+    }
+    
+    // Event Handlers
+    function handleGuestDragStart(e) {
+      draggedGuest = this;
+      this.classList.add('lv-dragging');
+      
+      // Set data for drag operation
+      e.dataTransfer.setData('text/plain', this.getAttribute('data-guest-id'));
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    
+    function handleGuestDragEnd() {
+      this.classList.remove('lv-dragging');
+      draggedGuest = null;
+    }
+    
+    function handleSeatDragOver(e) {
+      if (draggedGuest) {
+        e.preventDefault();
+        this.classList.add('lv-seat-dragover');
+      }
+    }
+    
+    function handleSeatDrop(e) {
+      e.preventDefault();
+      this.classList.remove('lv-seat-dragover');
+      
+      if (draggedGuest) {
+        const guestId = e.dataTransfer.getData('text/plain');
+        const seatId = this.getAttribute('data-seat-id');
+        
+        // Check if seat is already occupied
+        if (this.getAttribute('data-guest-id') && this.getAttribute('data-guest-id') !== '') {
+          alert('Dieser Platz ist bereits belegt. Bitte wählen Sie einen anderen Platz.');
+          return;
+        }
+        
+        // Assign guest to seat
+        assignGuestToSeat(guestId, seatId, this);
+      }
+    }
+    
+    function handleSeatClick(e) {
+      e.stopPropagation();
+      
+      const seatId = this.getAttribute('data-seat-id');
+      const guestId = this.getAttribute('data-guest-id');
+      
+      openGuestAssignmentModal(seatId, guestId);
+    }
+    
+    // Helper Functions
+    function selectElement(element) {
+      deselectAll();
+      element.classList.add('lv-selected');
+      selectedElement = element;
+    }
+    
+    function deselectAll() {
+      const selectedElements = document.querySelectorAll('.lv-selected');
+      selectedElements.forEach(el => el.classList.remove('lv-selected'));
+      selectedElement = null;
+    }
+    
+    function addTable(type) {
+      const tableSize = document.getElementById('tableSize').value;
+      let capacity = 8;
+      
+      switch (tableSize) {
+        case 'small':
+          capacity = 6;
+          break;
+        case 'medium':
+          capacity = 8;
+          break;
+        case 'large':
+          capacity = 10;
+          break;
+        case 'xl':
+          capacity = 12;
+          break;
+      }
+      
+      const colorPicker = document.querySelector('.lv-control-section .lv-color-picker');
+      const activeColor = colorPicker.querySelector('.lv-color-active').getAttribute('data-color');
+      
+      const tableId = nextTableId++;
+      const table = document.createElement('div');
+      table.className = `lv-table lv-table-${type}`;
+      table.setAttribute('data-table-id', tableId);
+      table.style.left = '100px';
+      table.style.top = '100px';
+      table.style.backgroundColor = activeColor;
+      
+      let tableHTML = `
+        <div class="lv-table-number">${tableId}</div>
+        <div class="lv-table-capacity">${capacity} Plätze</div>
+        <div class="lv-table-guests">
+      `;
+      
+      for (let i = 1; i <= capacity; i++) {
+        tableHTML += `
+          <div class="lv-seat" data-seat-id="${tableId}-${i}" data-guest-id="">
+            <div class="lv-seat-number">${i}</div>
+          </div>
+        `;
+      }
+      
+      tableHTML += `</div>`;
+      table.innerHTML = tableHTML;
+      
+      floorPlan.appendChild(table);
+      makeElementDraggable(table);
+      
+      // Add event listeners
+      table.addEventListener('click', function(e) {
+        if (e.target.classList.contains('lv-seat') || e.target.parentNode.classList.contains('lv-seat')) {
+          return;
+        }
+        selectElement(table);
+        e.stopPropagation();
+      });
+      
+      table.addEventListener('dblclick', function(e) {
+        if (e.target.classList.contains('lv-seat') || e.target.parentNode.classList.contains('lv-seat')) {
+          return;
+        }
+        openTablePropertiesModal(table);
+        e.stopPropagation();
+      });
+      
+      // Make seats droppable
+      const seats = table.querySelectorAll('.lv-seat');
+      seats.forEach(seat => {
+        seat.addEventListener('dragover', handleSeatDragOver);
+        seat.addEventListener('drop', handleSeatDrop);
+        seat.addEventListener('click', handleSeatClick);
+      });
+      
+      selectElement(table);
+    }
+    
+    function addRoomElement(type, label) {
+      const elementId = `${type}${nextElementId++}`;
+      const element = document.createElement('div');
+      element.className = `lv-room-element lv-${type}`;
+      element.setAttribute('data-element-id', elementId);
+      element.style.left = '100px';
+      element.style.top = '100px';
+      
+      element.innerHTML = `<div class="lv-element-label">${label}</div>`;
+      
+      floorPlan.appendChild(element);
+      makeElementDraggable(element);
+      
+      // Add event listeners
+      element.addEventListener('click', function(e) {
+        selectElement(element);
+        e.stopPropagation();
+      });
+      
+      selectElement(element);
+    }
+    
+    function deleteSelected() {
+      if (selectedElement) {
+        // If it's a table, check if it has assigned guests
+        if (selectedElement.classList.contains('lv-table')) {
+          const assignedSeats = selectedElement.querySelectorAll('.lv-seat[data-guest-id]:not([data-guest-id=""])');
+          if (assignedSeats.length > 0) {
+            if (!confirm(`Dieser Tisch hat ${assignedSeats.length} zugewiesene Gäste. Möchten Sie ihn wirklich löschen?`)) {
+              return;
+            }
+          }
+        }
+        
+        selectedElement.remove();
+        selectedElement = null;
+      }
+    }
+    
+    function clearAll() {
+      // Remove all tables and room elements
+      const tables = document.querySelectorAll('.lv-table');
+      const roomElements = document.querySelectorAll('.lv-room-element');
+      
+      tables.forEach(table => table.remove());
+      roomElements.forEach(element => element.remove());
+      
+      // Reset counters
+      nextTableId = 1;
+      nextElementId = 1;
+      
+      // Reset selected element
+      selectedElement = null;
+    }
+    
+    function saveLayout() {
+      // In a real app, this would save the layout to a database
+      // For now, we'll just show a success message
+      showNotification('Layout erfolgreich gespeichert.', 'success');
+    }
+    
+    function printLayout() {
+      // In a real app, this would generate a printable version
+      // For now, we'll just show a message
+      showNotification('Druckansicht wird vorbereitet...', 'info');
+    }
+    
+    function zoomIn() {
+      scale = Math.min(scale + 0.1, 2);
+      floorPlan.style.transform = `scale(${scale})`;
+    }
+    
+    function zoomOut() {
+      scale = Math.max(scale - 0.1, 0.5);
+      floorPlan.style.transform = `scale(${scale})`;
+    }
+    
+    function resetView() {
+      scale = 1;
+      floorPlan.style.transform = `scale(${scale})`;
+    }
+    
+    function openTablePropertiesModal(table) {
+      const tableId = table.getAttribute('data-table-id');
+      const tableName = table.querySelector('.lv-table-number').textContent;
+      const capacityText = table.querySelector('.lv-table-capacity').textContent;
+      const capacity = parseInt(capacityText);
+      const backgroundColor = table.style.backgroundColor;
+      
+      document.getElementById('tableId').value = tableId;
+      document.getElementById('tableName').value = tableName;
+      document.getElementById('tableCapacity').value = capacity;
+      
+      // Set active color
+      const colorOptions = document.querySelectorAll('#tablePropertiesModal .lv-color-option');
+      colorOptions.forEach(option => {
+        option.classList.remove('lv-color-active');
+        if (option.getAttribute('data-color') === backgroundColor) {
+          option.classList.add('lv-color-active');
+        }
+      });
+      
+      tablePropertiesModal.classList.add('lv-modal-open');
+    }
+    
+    function openGuestAssignmentModal(seatId, guestId) {
+      document.getElementById('seatId').value = seatId;
+      
+      // Populate guest select
+      const guestSelect = document.getElementById('guestSelect');
+      guestSelect.value = guestId || '';
+      
+      guestAssignmentModal.classList.add('lv-modal-open');
+    }
+    
+    function closeAllModals() {
+      tablePropertiesModal.classList.remove('lv-modal-open');
+      guestAssignmentModal.classList.remove('lv-modal-open');
+    }
+    
+    function saveTableProperties() {
+      const tableId = document.getElementById('tableId').value;
+      const tableName = document.getElementById('tableName').value;
+      const capacity = document.getElementById('tableCapacity').value;
+      const activeColor = document.querySelector('#tablePropertiesModal .lv-color-active').getAttribute('data-color');
+      
+      const table = document.querySelector(`.lv-table[data-table-id="${tableId}"]`);
+      if (table) {
+        table.querySelector('.lv-table-number').textContent = tableName;
+        table.querySelector('.lv-table-capacity').textContent = `${capacity} Plätze`;
+        table.style.backgroundColor = activeColor;
+        
+        // Update seats if capacity changed
+        const currentSeats = table.querySelectorAll('.lv-seat');
+        const currentCapacity = currentSeats.length;
+        
+        if (parseInt(capacity) !== currentCapacity) {
+          // This would be more complex in a real app
+          // For now, we'll just show a message
+          showNotification('Änderung der Kapazität erfordert eine Neuanordnung der Sitzplätze.', 'warning');
+        }
+      }
+      
+      closeAllModals();
+    }
+    
+    function assignGuest() {
+      const seatId = document.getElementById('seatId').value;
+      const guestId = document.getElementById('guestSelect').value;
+      const seat = document.querySelector(`.lv-seat[data-seat-id="${seatId}"]`);
+      
+      if (seat) {
+        if (guestId) {
+          assignGuestToSeat(guestId, seatId, seat);
+        } else {
+          // Clear seat
+          seat.setAttribute('data-guest-id', '');
+          seat.classList.remove('lv-seat-occupied');
+          if (seat.querySelector('.lv-guest-name')) {
+            seat.querySelector('.lv-guest-name').remove();
+          }
+        }
+      }
+      
+      closeAllModals();
+    }
+    
+    function removeGuest() {
+      const seatId = document.getElementById('seatId').value;
+      const seat = document.querySelector(`.lv-seat[data-seat-id="${seatId}"]`);
+      
+      if (seat) {
+        seat.setAttribute('data-guest-id', '');
+        seat.classList.remove('lv-seat-occupied');
+        if (seat.querySelector('.lv-guest-name')) {
+          seat.querySelector('.lv-guest-name').remove();
+        }
+      }
+      
+      closeAllModals();
+    }
+    
+    function assignGuestToSeat(guestId, seatId, seat) {
+      // Get guest data
+      const guest = document.querySelector(`.lv-guest-item[data-guest-id="${guestId}"]`);
+      if (!guest) return;
+      
+      const guestName = guest.querySelector('.lv-guest-name').textContent;
+      
+      // Update seat
+      seat.setAttribute('data-guest-id', guestId);
+      seat.classList.add('lv-seat-occupied');
+      
+      // Add guest name to seat
+      if (seat.querySelector('.lv-guest-name')) {
+        seat.querySelector('.lv-guest-name').textContent = guestName;
+      } else {
+        const nameElement = document.createElement('div');
+        nameElement.className = 'lv-guest-name';
+        nameElement.textContent = guestName;
+        seat.appendChild(nameElement);
+      }
+      
+      // Update guest list (in a real app, this would update the database)
+      // For now, we'll just hide the guest from the unassigned list if that filter is active
+      const activeFilter = document.querySelector('.lv-guest-filter .lv-filter-active');
+      if (activeFilter && activeFilter.getAttribute('data-filter') === 'unassigned') {
+        guest.style.display = 'none';
+      }
+    }
+    
+    function filterGuests(filter) {
+      const guests = document.querySelectorAll('.lv-guest-item');
+      
+      if (filter === 'all') {
+        guests.forEach(guest => {
+          guest.style.display = '';
+        });
+      } else if (filter === 'unassigned') {
+        // In a real app, this would check if the guest is assigned to any seat
+        // For now, we'll just show all guests
+        guests.forEach(guest => {
+          const guestId = guest.getAttribute('data-guest-id');
+          const assignedSeat = document.querySelector(`.lv-seat[data-guest-id="${guestId}"]`);
+          
+          if (assignedSeat) {
+            guest.style.display = 'none';
+          } else {
+            guest.style.display = '';
+          }
+        });
+      }
+    }
+    
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `lv-notification lv-notification-${type}`;
+      notification.textContent = message;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.classList.add('lv-notification-show');
+      }, 10);
+      
+      // Hide and remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('lv-notification-show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  });
+</script>
