@@ -12,9 +12,21 @@
               </div>
               <div class="lv-col lv-col-md-6">
                 <div class="lv-stats-container">
-                  <div v-for="(stat, index) in content.guestStats" :key="index" class="lv-stat-item">
-                    <div class="lv-stat-value" :class="stat.textClass">{{ stat.value }}</div>
-                    <div class="lv-stat-label">{{ stat.label }}</div>
+                  <div class="lv-stat-item">
+                    <div class="lv-stat-value">{{ totalGuests }}</div>
+                    <div class="lv-stat-label">{{ content.totalGuestsLabel || 'Gäste gesamt' }}</div>
+                  </div>
+                  <div class="lv-stat-item">
+                    <div class="lv-stat-value lv-text-success">{{ confirmedGuests }}</div>
+                    <div class="lv-stat-label">{{ content.confirmedGuestsLabel || 'Zugesagt' }}</div>
+                  </div>
+                  <div class="lv-stat-item">
+                    <div class="lv-stat-value lv-text-danger">{{ declinedGuests }}</div>
+                    <div class="lv-stat-label">{{ content.declinedGuestsLabel || 'Abgesagt' }}</div>
+                  </div>
+                  <div class="lv-stat-item">
+                    <div class="lv-stat-value lv-text-warning">{{ pendingGuests }}</div>
+                    <div class="lv-stat-label">{{ content.pendingGuestsLabel || 'Ausstehend' }}</div>
                   </div>
                 </div>
               </div>
@@ -45,7 +57,7 @@
       <div class="lv-filter-bar lv-mb-3">
         <div class="lv-filter-group">
           <button 
-            v-for="(filter, index) in content.statusFilters" 
+            v-for="(filter, index) in statusFilters" 
             :key="'status-' + index" 
             class="lv-filter-btn" 
             :class="{ 'lv-filter-active': currentStatusFilter === filter.value }"
@@ -55,7 +67,8 @@
         </div>
         <div class="lv-filter-group">
           <select class="lv-form-control lv-filter-select" v-model="currentGroupFilter" @change="filterGuests">
-            <option v-for="(group, index) in content.groupFilters" :key="'group-' + index" :value="group.value">
+            <option value="all">{{ content.allGroupsLabel || 'Alle Gruppen' }}</option>
+            <option v-for="group in groupOptions" :key="group.value" :value="group.value">
               {{ group.label }}
             </option>
           </select>
@@ -69,11 +82,11 @@
             <table class="lv-table">
               <thead>
                 <tr>
-                  <th v-for="(column, index) in content.tableColumns" :key="index">{{ column }}</th>
+                  <th v-for="(column, index) in tableColumns" :key="index">{{ column }}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(guest, index) in filteredGuests" :key="index" :data-status="guest.status" :data-group="guest.group">
+                <tr v-for="(guest, index) in paginatedGuests" :key="guest.id" :data-status="guest.status" :data-group="guest.group_type">
                   <td>
                     <div class="lv-guest-name">
                       <div class="lv-guest-avatar">{{ getInitials(guest.name) }}</div>
@@ -84,17 +97,17 @@
                     </div>
                   </td>
                   <td>
-                    <div>{{ guest.email }}</div>
-                    <div>{{ guest.phone }}</div>
+                    <div>{{ guest.email || '-' }}</div>
+                    <div>{{ guest.phone || '-' }}</div>
                   </td>
-                  <td>{{ guest.groupLabel }}</td>
+                  <td>{{ guest.group_label }}</td>
                   <td><span class="lv-badge" :class="'lv-badge-' + guest.status">{{ getRsvpLabel(guest.status) }}</span></td>
                   <td>{{ guest.meal || '-' }}</td>
-                  <td>{{ guest.plusOne ? 'Ja - ' + guest.plusOneName : 'Nein' }}</td>
+                  <td>{{ guest.plus_one ? 'Ja - ' + (guest.plus_one_name || 'Unbenannt') : 'Nein' }}</td>
                   <td>
                     <div class="lv-action-buttons">
-                      <button class="lv-btn-icon lv-edit-guest" @click="editGuest(index)">✏️</button>
-                      <button class="lv-btn-icon lv-delete-guest" @click="openDeleteModal(index)">🗑️</button>
+                      <button class="lv-btn-icon lv-edit-guest" @click="editGuest(guest)">✏️</button>
+                      <button class="lv-btn-icon lv-delete-guest" @click="openDeleteModal(guest)">🗑️</button>
                     </div>
                   </td>
                 </tr>
@@ -156,9 +169,9 @@
               <div class="lv-col lv-col-md-6">
                 <div class="lv-form-group">
                   <label class="lv-form-label" for="guestGroup">{{ content.groupLabel || 'Gruppe' }}*</label>
-                  <select class="lv-form-control" id="guestGroup" required v-model="currentGuest.group">
+                  <select class="lv-form-control" id="guestGroup" required v-model="currentGuest.group_type">
                     <option value="">{{ content.selectGroupPlaceholder || 'Bitte wählen' }}</option>
-                    <option v-for="(group, index) in content.groupOptions" :key="index" :value="group.value">
+                    <option v-for="group in groupOptions" :key="group.value" :value="group.value">
                       {{ group.label }}
                     </option>
                   </select>
@@ -170,7 +183,7 @@
                 <div class="lv-form-group">
                   <label class="lv-form-label" for="guestRsvp">{{ content.rsvpLabel || 'RSVP-Status' }}</label>
                   <select class="lv-form-control" id="guestRsvp" v-model="currentGuest.status">
-                    <option v-for="(status, index) in content.rsvpOptions" :key="index" :value="status.value">
+                    <option v-for="status in rsvpOptions" :key="status.value" :value="status.value">
                       {{ status.label }}
                     </option>
                   </select>
@@ -181,7 +194,7 @@
                   <label class="lv-form-label" for="guestMeal">{{ content.mealLabel || 'Menüwahl' }}</label>
                   <select class="lv-form-control" id="guestMeal" v-model="currentGuest.meal">
                     <option value="">{{ content.selectMealPlaceholder || 'Bitte wählen' }}</option>
-                    <option v-for="(meal, index) in content.mealOptions" :key="index" :value="meal.value">
+                    <option v-for="meal in mealOptions" :key="meal.value" :value="meal.value">
                       {{ meal.label }}
                     </option>
                   </select>
@@ -192,15 +205,15 @@
               <div class="lv-col lv-col-md-6">
                 <div class="lv-form-group">
                   <div class="lv-checkbox-container">
-                    <input type="checkbox" id="guestPlusOne" class="lv-checkbox" v-model="currentGuest.plusOne">
+                    <input type="checkbox" id="guestPlusOne" class="lv-checkbox" v-model="currentGuest.plus_one">
                     <label for="guestPlusOne">{{ content.plusOneLabel || 'Plus-Eins erlaubt' }}</label>
                   </div>
                 </div>
               </div>
-              <div class="lv-col lv-col-md-6" v-show="currentGuest.plusOne">
+              <div class="lv-col lv-col-md-6" v-show="currentGuest.plus_one">
                 <div class="lv-form-group">
                   <label class="lv-form-label" for="guestPlusOneName">{{ content.plusOneNameLabel || 'Name der Begleitperson' }}</label>
-                  <input type="text" class="lv-form-control" id="guestPlusOneName" v-model="currentGuest.plusOneName" :placeholder="content.plusOneNamePlaceholder || 'Name der Begleitperson'">
+                  <input type="text" class="lv-form-control" id="guestPlusOneName" v-model="currentGuest.plus_one_name" :placeholder="content.plusOneNamePlaceholder || 'Name der Begleitperson'">
                 </div>
               </div>
             </div>
@@ -245,20 +258,70 @@ export default {
   },
   data() {
     return {
+      // Supabase client (will be initialized in mounted)
+      supabase: null,
+      weddingId: null,
+      
+      // Guests data
+      guests: [],
+      filteredGuests: [],
+      
+      // UI state
       searchQuery: '',
       currentStatusFilter: 'all',
       currentGroupFilter: 'all',
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       isGuestModalOpen: false,
       isDeleteModalOpen: false,
       isEditMode: false,
-      currentGuestIndex: -1,
       currentGuest: this.getEmptyGuest(),
-      filteredGuests: []
+      guestToDelete: null,
+      
+      // Options for dropdowns
+      statusFilters: [
+        { value: 'all', label: 'Alle Status' },
+        { value: 'confirmed', label: 'Zugesagt' },
+        { value: 'declined', label: 'Abgesagt' },
+        { value: 'pending', label: 'Ausstehend' }
+      ],
+      rsvpOptions: [
+        { value: 'confirmed', label: 'Zugesagt' },
+        { value: 'declined', label: 'Abgesagt' },
+        { value: 'pending', label: 'Ausstehend' }
+      ],
+      groupOptions: [],
+      mealOptions: [
+        { value: 'meat', label: 'Fleisch' },
+        { value: 'fish', label: 'Fisch' },
+        { value: 'vegetarian', label: 'Vegetarisch' },
+        { value: 'vegan', label: 'Vegan' },
+        { value: 'special', label: 'Spezielle Anforderungen' }
+      ],
+      tableColumns: [
+        'Name',
+        'Kontakt',
+        'Gruppe',
+        'RSVP',
+        'Menü',
+        'Plus-Eins',
+        'Aktionen'
+      ]
     };
   },
   computed: {
+    totalGuests() {
+      return this.guests.length;
+    },
+    confirmedGuests() {
+      return this.guests.filter(guest => guest.status === 'confirmed').length;
+    },
+    declinedGuests() {
+      return this.guests.filter(guest => guest.status === 'declined').length;
+    },
+    pendingGuests() {
+      return this.guests.filter(guest => guest.status === 'pending').length;
+    },
     totalPages() {
       return Math.ceil(this.filteredGuests.length / this.itemsPerPage);
     },
@@ -268,28 +331,193 @@ export default {
       return this.filteredGuests.slice(start, end);
     }
   },
-  mounted() {
+  async mounted() {
+    // Initialize Supabase client
+    this.initSupabase();
+    
+    // Get wedding ID for current user
+    await this.getCurrentWeddingId();
+    
+    // Load data
+    if (this.weddingId) {
+      await this.loadGuests();
+      this.setupGroupOptions();
+    }
+    
+    // Initialize filtered guests
     this.filterGuests();
   },
   methods: {
+    // Supabase Integration
+    initSupabase() {
+      // Get Supabase client from window (initialized in WeWeb)
+      if (window.supabase) {
+        this.supabase = window.supabase;
+      } else {
+        console.error('Supabase client not found');
+      }
+    },
+    
+    async getCurrentWeddingId() {
+      try {
+        if (!this.supabase) return;
+        
+        // Get current user
+        const { data: { user } } = await this.supabase.auth.getUser();
+        if (!user) return;
+        
+        // Get user profile with wedding ID
+        const { data: userData, error: userError } = await this.supabase
+          .from('users')
+          .select('wedding_id')
+          .eq('id', user.id)
+          .single();
+        
+        if (userError) throw userError;
+        
+        this.weddingId = userData.wedding_id;
+      } catch (error) {
+        console.error('Error getting wedding ID:', error);
+      }
+    },
+    
+    async loadGuests() {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        const { data, error } = await this.supabase
+          .from('guests')
+          .select('*')
+          .eq('wedding_id', this.weddingId)
+          .eq('is_active', true);
+        
+        if (error) throw error;
+        
+        this.guests = data || [];
+      } catch (error) {
+        console.error('Error loading guests:', error);
+      }
+    },
+    
+    setupGroupOptions() {
+      // Extract unique group types and create options
+      const uniqueGroups = [...new Set(this.guests.map(guest => guest.group_type))];
+      
+      this.groupOptions = uniqueGroups.map(group => {
+        const guest = this.guests.find(g => g.group_type === group);
+        return {
+          value: group,
+          label: guest ? guest.group_label : group
+        };
+      });
+    },
+    
+    // Guest Operations
+    async addGuest(guestData) {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        const newGuest = {
+          ...guestData,
+          wedding_id: this.weddingId
+        };
+        
+        const { data, error } = await this.supabase
+          .from('guests')
+          .insert([newGuest])
+          .select();
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          // Add guest to local state
+          this.guests.push(data[0]);
+          this.setupGroupOptions();
+          this.filterGuests();
+        }
+        
+        return data[0];
+      } catch (error) {
+        console.error('Error adding guest:', error);
+        return null;
+      }
+    },
+    
+    async updateGuest(guestData) {
+      try {
+        if (!this.supabase) return;
+        
+        const { error } = await this.supabase
+          .from('guests')
+          .update(guestData)
+          .eq('id', guestData.id);
+        
+        if (error) throw error;
+        
+        // Update local state
+        const index = this.guests.findIndex(g => g.id === guestData.id);
+        if (index !== -1) {
+          this.guests[index] = {
+            ...this.guests[index],
+            ...guestData
+          };
+        }
+        
+        this.setupGroupOptions();
+        this.filterGuests();
+        
+        return true;
+      } catch (error) {
+        console.error('Error updating guest:', error);
+        return false;
+      }
+    },
+    
+    async removeGuest(guestId) {
+      try {
+        if (!this.supabase) return;
+        
+        // Soft delete by setting is_active to false
+        const { error } = await this.supabase
+          .from('guests')
+          .update({ is_active: false })
+          .eq('id', guestId);
+        
+        if (error) throw error;
+        
+        // Remove from local state
+        this.guests = this.guests.filter(g => g.id !== guestId);
+        this.setupGroupOptions();
+        this.filterGuests();
+        
+        return true;
+      } catch (error) {
+        console.error('Error removing guest:', error);
+        return false;
+      }
+    },
+    
+    // UI Interaction Methods
     getEmptyGuest() {
       return {
         name: '',
         email: '',
         phone: '',
-        group: '',
-        groupLabel: '',
+        group_type: '',
+        group_label: '',
         status: 'pending',
         meal: '',
-        plusOne: false,
-        plusOneName: '',
+        plus_one: false,
+        plus_one_name: '',
         notes: ''
       };
     },
+    
     getInitials(name) {
       if (!name) return '';
       return name.split(' ').map(n => n[0]).join('').toUpperCase();
     },
+    
     getRsvpLabel(status) {
       const statusMap = {
         confirmed: 'Zugesagt',
@@ -298,16 +526,17 @@ export default {
       };
       return statusMap[status] || 'Ausstehend';
     },
+    
     filterGuests() {
-      let filtered = [...(this.content.guests || [])];
+      let filtered = [...this.guests];
       
       // Apply search filter
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
         filtered = filtered.filter(guest => 
           guest.name.toLowerCase().includes(query) || 
-          guest.email.toLowerCase().includes(query) ||
-          guest.phone.includes(query) ||
+          (guest.email && guest.email.toLowerCase().includes(query)) ||
+          (guest.phone && guest.phone.includes(query)) ||
           (guest.notes && guest.notes.toLowerCase().includes(query))
         );
       }
@@ -319,205 +548,226 @@ export default {
       
       // Apply group filter
       if (this.currentGroupFilter !== 'all') {
-        filtered = filtered.filter(guest => guest.group === this.currentGroupFilter);
+        filtered = filtered.filter(guest => guest.group_type === this.currentGroupFilter);
       }
       
       this.filteredGuests = filtered;
-      this.currentPage = 1; // Reset to first page when filters change
+      
+      // Reset to first page when filters change
+      if (this.currentPage > 1) {
+        this.currentPage = 1;
+      }
     },
+    
     setStatusFilter(status) {
       this.currentStatusFilter = status;
       this.filterGuests();
     },
+    
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
     },
+    
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
     },
+    
     goToPage(page) {
       this.currentPage = page;
     },
+    
     openGuestModal() {
       this.isEditMode = false;
       this.currentGuest = this.getEmptyGuest();
       this.isGuestModalOpen = true;
     },
+    
     closeGuestModal() {
       this.isGuestModalOpen = false;
     },
-    editGuest(index) {
+    
+    editGuest(guest) {
       this.isEditMode = true;
-      this.currentGuestIndex = index;
-      this.currentGuest = { ...this.filteredGuests[index] };
+      this.currentGuest = { ...guest };
       this.isGuestModalOpen = true;
     },
-    saveGuest() {
-      if (!this.currentGuest.name || !this.currentGuest.group) {
+    
+    async saveGuest() {
+      if (!this.currentGuest.name || !this.currentGuest.group_type) {
         alert('Bitte füllen Sie alle Pflichtfelder aus.');
         return;
       }
       
-      // Find the group label
-      const groupOption = (this.content.groupOptions || []).find(g => g.value === this.currentGuest.group);
+      // Find the group label if it exists
+      const groupOption = this.groupOptions.find(g => g.value === this.currentGuest.group_type);
       if (groupOption) {
-        this.currentGuest.groupLabel = groupOption.label;
+        this.currentGuest.group_label = groupOption.label;
+      } else {
+        // If it's a new group, use the value as the label
+        this.currentGuest.group_label = this.currentGuest.group_type;
       }
+      
+      let success = false;
       
       if (this.isEditMode) {
         // Update existing guest
-        // In a real application, you would update this in a database
-        console.log('Guest updated:', this.currentGuest);
+        success = await this.updateGuest(this.currentGuest);
       } else {
         // Add new guest
-        // In a real application, you would save this to a database
-        const updatedGuests = [...(this.content.guests || [])];
-        updatedGuests.push({...this.currentGuest});
-        
-        // In WeWeb, you would typically use a workflow to update the content
-        console.log('New guest added:', this.currentGuest);
+        const newGuest = await this.addGuest(this.currentGuest);
+        success = !!newGuest;
       }
       
-      this.closeGuestModal();
-      this.filterGuests();
+      if (success) {
+        this.closeGuestModal();
+      } else {
+        alert('Es gab ein Problem beim Speichern des Gastes. Bitte versuchen Sie es erneut.');
+      }
     },
-    openDeleteModal(index) {
-      this.currentGuestIndex = index;
+    
+    openDeleteModal(guest) {
+      this.guestToDelete = guest;
       this.isDeleteModalOpen = true;
     },
+    
     closeDeleteModal() {
       this.isDeleteModalOpen = false;
+      this.guestToDelete = null;
     },
-    deleteGuest() {
-      // In a real application, you would delete this from a database
-      console.log('Guest deleted:', this.filteredGuests[this.currentGuestIndex]);
+    
+    async deleteGuest() {
+      if (!this.guestToDelete) return;
       
-      this.closeDeleteModal();
-      this.filterGuests();
+      const success = await this.removeGuest(this.guestToDelete.id);
+      
+      if (success) {
+        this.closeDeleteModal();
+      } else {
+        alert('Es gab ein Problem beim Löschen des Gastes. Bitte versuchen Sie es erneut.');
+      }
     },
+    
     importGuests() {
-      // This would typically open a file picker or import dialog
-      console.log('Import guests functionality would be implemented here');
-      // In a real application, you would handle file upload and parsing
+      // This would typically open a file upload dialog or similar
+      alert('Importfunktion wird implementiert...');
     }
   }
 };
 </script>
 
-<style scoped>
-/* Guest Management styles */
+<style>
 .lv-guest-management {
-  padding: 20px 0;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
 .lv-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.lv-mb-3 {
-  margin-bottom: 1rem;
-}
-
-.lv-p-3 {
-  padding: 1rem;
+  padding: 15px;
 }
 
 .lv-row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 0 -15px;
 }
 
 .lv-col {
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  flex: 1;
 }
 
-@media (min-width: 768px) {
-  .lv-col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
+.lv-col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
 }
 
-/* Card styles */
+.lv-mb-2 {
+  margin-bottom: 10px;
+}
+
+.lv-mb-3 {
+  margin-bottom: 15px;
+}
+
+.lv-p-3 {
+  padding: 15px;
+}
+
+.lv-text-right {
+  text-align: right;
+}
+
 .lv-card {
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .lv-card-body {
-  padding: 1rem;
+  padding: 15px;
 }
 
 .lv-card-body.lv-p-0 {
   padding: 0;
 }
 
-/* Stats styles */
 .lv-stats-container {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .lv-stat-item {
   text-align: center;
-  padding: 0.5rem;
+  padding: 10px;
   flex: 1;
   min-width: 80px;
 }
 
 .lv-stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .lv-stat-label {
-  font-size: 0.8rem;
-  color: #777;
-  margin-top: 0.25rem;
+  font-size: 12px;
+  color: #666;
 }
 
 .lv-text-success {
-  color: #4caf50;
+  color: #28a745;
 }
 
 .lv-text-danger {
-  color: #f44336;
+  color: #dc3545;
 }
 
 .lv-text-warning {
   color: #ffc107;
 }
 
-/* Search and action bar */
 .lv-search-container {
   position: relative;
 }
 
 .lv-search-input {
-  padding-right: 40px;
+  width: 100%;
+  padding: 8px 30px 8px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .lv-search-btn {
   position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 40px;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
@@ -525,151 +775,177 @@ export default {
 
 .lv-button-group {
   display: flex;
+  gap: 10px;
   justify-content: flex-end;
 }
 
-.lv-button-group .lv-btn {
-  margin-left: 0.5rem;
+.lv-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
-/* Filter bar */
+.lv-btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.lv-btn-primary:hover {
+  background-color: #0069d9;
+}
+
+.lv-btn-outline {
+  background-color: transparent;
+  border: 1px solid #ccc;
+}
+
+.lv-btn-outline:hover {
+  background-color: #f8f9fa;
+}
+
+.lv-btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.lv-btn-danger:hover {
+  background-color: #c82333;
+}
+
 .lv-filter-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .lv-filter-group {
   display: flex;
-  align-items: center;
-  margin: 0.5rem 0;
+  gap: 5px;
 }
 
 .lv-filter-btn {
-  background: none;
-  border: 1px solid #ddd;
-  padding: 0.375rem 0.75rem;
-  margin-right: 0.5rem;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: transparent;
   cursor: pointer;
-  transition: all 0.3s;
-}
-
-.lv-filter-btn:hover {
-  background-color: #f5f5f5;
+  font-size: 12px;
 }
 
 .lv-filter-active {
-  background-color: #f8c630;
+  background-color: #007bff;
   color: white;
-  border-color: #f8c630;
+  border-color: #007bff;
 }
 
 .lv-filter-select {
-  min-width: 150px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
-/* Table styles */
 .lv-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.lv-table th,
-.lv-table td {
-  padding: 0.75rem;
+.lv-table th, .lv-table td {
+  padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
 
 .lv-table th {
-  font-weight: 600;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
+  font-weight: 500;
 }
 
 .lv-guest-name {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .lv-guest-avatar {
   width: 36px;
   height: 36px;
+  background-color: #e9ecef;
   border-radius: 50%;
-  background-color: #f8c630;
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  margin-right: 0.75rem;
+  font-weight: bold;
+  color: #495057;
 }
 
 .lv-guest-fullname {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .lv-guest-notes {
-  font-size: 0.8rem;
-  color: #777;
+  font-size: 12px;
+  color: #6c757d;
 }
 
 .lv-badge {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .lv-badge-confirmed {
-  background-color: #e8f5e9;
-  color: #4caf50;
+  background-color: #d4edda;
+  color: #155724;
 }
 
 .lv-badge-declined {
-  background-color: #ffebee;
-  color: #f44336;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .lv-badge-pending {
-  background-color: #fff8e1;
-  color: #ffc107;
+  background-color: #fff3cd;
+  color: #856404;
 }
 
 .lv-action-buttons {
   display: flex;
+  gap: 5px;
 }
 
 .lv-btn-icon {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  padding: 0.25rem;
-  margin-right: 0.5rem;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 4px;
 }
 
-/* Pagination */
+.lv-btn-icon:hover {
+  background-color: #f8f9fa;
+}
+
 .lv-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .lv-pagination-btn {
-  background: none;
-  border: 1px solid #ddd;
-  padding: 0.375rem 0.75rem;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: transparent;
   cursor: pointer;
-  transition: all 0.3s;
-}
-
-.lv-pagination-btn:hover:not(:disabled) {
-  background-color: #f5f5f5;
 }
 
 .lv-pagination-btn:disabled {
@@ -679,33 +955,27 @@ export default {
 
 .lv-pagination-pages {
   display: flex;
-  margin: 0 0.5rem;
+  gap: 5px;
 }
 
 .lv-pagination-page {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ddd;
-  margin: 0 0.25rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.lv-pagination-page:hover {
-  background-color: #f5f5f5;
 }
 
 .lv-pagination-active {
-  background-color: #f8c630;
+  background-color: #007bff;
   color: white;
-  border-color: #f8c630;
+  border-color: #007bff;
 }
 
-/* Modal styles */
 .lv-modal {
   display: none;
   position: fixed;
@@ -714,21 +984,19 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
-  overflow: auto;
-}
-
-.lv-modal-open {
-  display: flex;
+  z-index: 1000;
   align-items: center;
   justify-content: center;
 }
 
+.lv-modal-open {
+  display: flex;
+}
+
 .lv-modal-dialog {
-  position: relative;
   width: 100%;
   max-width: 600px;
-  margin: 1.75rem auto;
+  margin: 30px auto;
 }
 
 .lv-modal-sm {
@@ -736,173 +1004,80 @@ export default {
 }
 
 .lv-modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
   background-color: #fff;
-  border-radius: 0.3rem;
-  outline: 0;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .lv-modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.lv-modal-header h3 {
-  margin: 0;
-  font-size: 1.25rem;
+  align-items: center;
 }
 
 .lv-modal-close {
   background: none;
   border: none;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
-  opacity: 0.5;
+  font-size: 24px;
   cursor: pointer;
 }
 
-.lv-modal-close:hover {
-  opacity: 0.75;
-}
-
 .lv-modal-body {
-  position: relative;
-  flex: 1 1 auto;
-  padding: 1rem;
+  padding: 15px;
 }
 
 .lv-modal-footer {
+  padding: 15px;
+  border-top: 1px solid #eee;
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  padding: 1rem;
-  border-top: 1px solid #e9ecef;
+  gap: 10px;
 }
 
-.lv-modal-footer > .lv-btn {
-  margin-left: 0.5rem;
-}
-
-/* Form styles */
 .lv-form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 .lv-form-label {
-  display: inline-block;
-  margin-bottom: 0.5rem;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .lv-form-control {
-  display: block;
   width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s;
-}
-
-.lv-form-control:focus {
-  border-color: #f8c630;
-  outline: 0;
-}
-
-select.lv-form-control {
-  height: calc(2.25rem + 2px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .lv-checkbox-container {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
 .lv-checkbox {
-  margin-right: 0.5rem;
+  margin-right: 5px;
 }
 
-/* Button styles */
-.lv-btn {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
-  cursor: pointer;
-}
-
-.lv-btn-primary {
-  color: #fff;
-  background-color: #f8c630;
-  border-color: #f8c630;
-}
-
-.lv-btn-primary:hover {
-  background-color: #e6b520;
-  border-color: #e6b520;
-}
-
-.lv-btn-outline {
-  color: #f8c630;
-  background-color: transparent;
-  border-color: #f8c630;
-}
-
-.lv-btn-outline:hover {
-  color: #fff;
-  background-color: #f8c630;
-  border-color: #f8c630;
-}
-
-.lv-btn-danger {
-  color: #fff;
-  background-color: #f44336;
-  border-color: #f44336;
-}
-
-.lv-btn-danger:hover {
-  background-color: #e53935;
-  border-color: #e53935;
-}
-
-.lv-text-right {
-  text-align: right;
-}
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .lv-text-right {
-    text-align: left;
-    margin-top: 1rem;
+  .lv-col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
   
   .lv-filter-bar {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 10px;
   }
   
   .lv-filter-group {
-    margin-bottom: 0.5rem;
     width: 100%;
-    overflow-x: auto;
   }
   
   .lv-table {

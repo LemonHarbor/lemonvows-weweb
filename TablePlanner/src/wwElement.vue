@@ -13,19 +13,19 @@
               <div class="lv-col lv-col-md-6">
                 <div class="lv-stats-container">
                   <div class="lv-stat-item">
-                    <div class="lv-stat-value">{{ content.totalGuests || '120' }}</div>
+                    <div class="lv-stat-value">{{ totalGuests }}</div>
                     <div class="lv-stat-label">{{ content.totalGuestsLabel || 'Gäste gesamt' }}</div>
                   </div>
                   <div class="lv-stat-item">
-                    <div class="lv-stat-value lv-text-success">{{ content.seatedGuests || '85' }}</div>
+                    <div class="lv-stat-value lv-text-success">{{ seatedGuests }}</div>
                     <div class="lv-stat-label">{{ content.seatedGuestsLabel || 'Platziert' }}</div>
                   </div>
                   <div class="lv-stat-item">
-                    <div class="lv-stat-value lv-text-warning">{{ content.unseatedGuests || '35' }}</div>
+                    <div class="lv-stat-value lv-text-warning">{{ unseatedGuests }}</div>
                     <div class="lv-stat-label">{{ content.unseatedGuestsLabel || 'Nicht platziert' }}</div>
                   </div>
                   <div class="lv-stat-item">
-                    <div class="lv-stat-value">{{ content.totalTables || '12' }}</div>
+                    <div class="lv-stat-value">{{ tables.length }}</div>
                     <div class="lv-stat-label">{{ content.totalTablesLabel || 'Tische' }}</div>
                   </div>
                 </div>
@@ -194,7 +194,7 @@
                     :key="table.id"
                     class="lv-table" 
                     :class="'lv-table-' + table.type"
-                    :style="{ left: table.left + 'px', top: table.top + 'px', backgroundColor: table.color }"
+                    :style="{ left: table.position_x + 'px', top: table.position_y + 'px', backgroundColor: table.color }"
                     :data-table-id="table.id"
                     @mousedown="startDrag($event, table)"
                     @dblclick="openTableProperties(table)">
@@ -203,16 +203,16 @@
                     <div class="lv-table-guests">
                       <!-- Seats -->
                       <div 
-                        v-for="seat in table.seats" 
+                        v-for="seat in getTableSeats(table.id)" 
                         :key="seat.id"
                         class="lv-seat" 
-                        :class="{ 'lv-seat-occupied': seat.guestId }"
+                        :class="{ 'lv-seat-occupied': seat.guest_id }"
                         :data-seat-id="seat.id"
-                        :data-guest-id="seat.guestId"
+                        :data-guest-id="seat.guest_id"
                         @click="openGuestAssignment(seat)">
                         <div class="lv-seat-number">{{ seat.number }}</div>
-                        <div v-if="seat.guestId" class="lv-seat-guest">
-                          {{ getGuestName(seat.guestId) }}
+                        <div v-if="seat.guest_id" class="lv-seat-guest">
+                          {{ getGuestName(seat.guest_id) }}
                         </div>
                       </div>
                     </div>
@@ -224,7 +224,7 @@
                     :key="element.id"
                     class="lv-room-element" 
                     :class="'lv-' + element.type"
-                    :style="{ left: element.left + 'px', top: element.top + 'px' }"
+                    :style="{ left: element.position_x + 'px', top: element.position_y + 'px' }"
                     :data-element-id="element.id"
                     @mousedown="startDrag($event, element)">
                     <div class="lv-element-label">{{ element.label }}</div>
@@ -314,7 +314,7 @@
               <input type="hidden" v-model="editingSeat.id">
               <div class="lv-form-group">
                 <label class="lv-form-label">{{ content.selectGuestLabel || 'Gast auswählen' }}</label>
-                <select class="lv-form-control" v-model="editingSeat.guestId">
+                <select class="lv-form-control" v-model="editingSeat.guest_id">
                   <option value="">{{ content.selectGuestPlaceholder || '-- Bitte wählen --' }}</option>
                   <option 
                     v-for="guest in availableGuests" 
@@ -356,8 +356,13 @@ export default {
   },
   data() {
     return {
-      // Table planner state
+      // Supabase client (will be initialized in mounted)
+      supabase: null,
+      weddingId: null,
+      
+      // Tables data
       tables: [],
+      seats: [],
       roomElements: [],
       guests: [],
       
@@ -365,215 +370,494 @@ export default {
       tableSize: 'medium',
       selectedColor: '#ffffff',
       guestSearch: '',
-      guestFilter: 'unassigned',
+      guestFilter: 'all',
       zoomLevel: 1,
       
-      // Drag and drop state
+      // Drag and drop
       isDragging: false,
-      draggedItem: null,
+      draggedElement: null,
       dragOffsetX: 0,
       dragOffsetY: 0,
       
-      // Modal state
+      // Modals
       showTablePropertiesModal: false,
       showGuestAssignmentModal: false,
       editingTable: {
         id: '',
         number: '',
+        type: 'round',
         capacity: 8,
         color: '#ffffff',
         notes: ''
       },
       editingSeat: {
         id: '',
-        guestId: '',
+        table_id: '',
+        number: 0,
+        guest_id: '',
         notes: ''
       }
     };
   },
   computed: {
+    totalGuests() {
+      return this.guests.length;
+    },
+    seatedGuests() {
+      return this.seats.filter(seat => seat.guest_id).length;
+    },
+    unseatedGuests() {
+      return this.totalGuests - this.seatedGuests;
+    },
     filteredGuests() {
-      let result = this.guests;
+      let filtered = [...this.guests];
       
       // Apply search filter
       if (this.guestSearch) {
-        const search = this.guestSearch.toLowerCase();
-        result = result.filter(guest => 
-          guest.name.toLowerCase().includes(search) || 
-          guest.info.toLowerCase().includes(search)
+        const query = this.guestSearch.toLowerCase();
+        filtered = filtered.filter(guest => 
+          guest.name.toLowerCase().includes(query)
         );
       }
       
-      // Apply assignment filter
+      // Apply unassigned filter
       if (this.guestFilter === 'unassigned') {
-        result = result.filter(guest => !this.isGuestAssigned(guest.id));
+        const assignedGuestIds = this.seats
+          .filter(seat => seat.guest_id)
+          .map(seat => seat.guest_id);
+        
+        filtered = filtered.filter(guest => !assignedGuestIds.includes(guest.id));
       }
       
-      return result;
+      return filtered;
     },
     availableGuests() {
-      // Return all guests that are not assigned to any seat
-      // plus the guest currently assigned to the editing seat
+      // For guest assignment modal - show all guests or only unassigned ones
+      const assignedGuestIds = this.seats
+        .filter(seat => seat.guest_id && seat.id !== this.editingSeat.id)
+        .map(seat => seat.guest_id);
+      
       return this.guests.filter(guest => 
-        !this.isGuestAssigned(guest.id) || guest.id === this.editingSeat.guestId
+        !assignedGuestIds.includes(guest.id) || guest.id === this.editingSeat.guest_id
       );
     }
   },
-  mounted() {
-    // Initialize with sample data
-    this.initializeSampleData();
+  async mounted() {
+    // Initialize Supabase client
+    this.initSupabase();
     
-    // Add event listeners for drag operations
-    document.addEventListener('mousemove', this.drag);
-    document.addEventListener('mouseup', this.endDrag);
+    // Get wedding ID for current user
+    await this.getCurrentWeddingId();
+    
+    // Load data
+    if (this.weddingId) {
+      await Promise.all([
+        this.loadTables(),
+        this.loadSeats(),
+        this.loadRoomElements(),
+        this.loadGuests()
+      ]);
+    }
+    
+    // Set up event listeners for drag and drop
+    document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('mouseup', this.onMouseUp);
   },
   beforeDestroy() {
-    // Remove event listeners
-    document.removeEventListener('mousemove', this.drag);
-    document.removeEventListener('mouseup', this.endDrag);
+    // Clean up event listeners
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseup', this.onMouseUp);
   },
   methods: {
-    initializeSampleData() {
-      // Initialize sample guests
-      this.guests = [
-        { id: '1', name: 'Anna Schmidt', info: 'Familie der Braut' },
-        { id: '2', name: 'Thomas Müller', info: 'Familie des Bräutigams' },
-        { id: '3', name: 'Julia Weber', info: 'Freundin der Braut' },
-        { id: '4', name: 'Michael Schneider', info: 'Freund des Bräutigams' },
-        { id: '5', name: 'Sarah Fischer', info: 'Kollegin der Braut' },
-        { id: '6', name: 'Markus Wagner', info: 'Kollege des Bräutigams' },
-        { id: '7', name: 'Laura Becker', info: 'Cousine der Braut' },
-        { id: '8', name: 'Daniel Hoffmann', info: 'Cousin des Bräutigams' }
-      ];
-      
-      // Initialize sample tables
-      this.tables = [
-        {
-          id: '1',
-          type: 'round',
-          number: '1',
-          capacity: 8,
-          color: '#ffffff',
-          left: 100,
-          top: 150,
-          notes: '',
-          seats: this.generateSeats('1', 8)
-        },
-        {
-          id: '2',
-          type: 'rect',
-          number: '2',
-          capacity: 8,
-          color: '#ffffff',
-          left: 300,
-          top: 150,
-          notes: '',
-          seats: this.generateSeats('2', 8)
+    // Supabase Integration
+    initSupabase() {
+      // Get Supabase client from window (initialized in WeWeb)
+      if (window.supabase) {
+        this.supabase = window.supabase;
+      } else {
+        console.error('Supabase client not found');
+      }
+    },
+    
+    async getCurrentWeddingId() {
+      try {
+        if (!this.supabase) return;
+        
+        // Get current user
+        const { data: { user } } = await this.supabase.auth.getUser();
+        if (!user) return;
+        
+        // Get user profile with wedding ID
+        const { data: userData, error: userError } = await this.supabase
+          .from('users')
+          .select('wedding_id')
+          .eq('id', user.id)
+          .single();
+        
+        if (userError) throw userError;
+        
+        this.weddingId = userData.wedding_id;
+      } catch (error) {
+        console.error('Error getting wedding ID:', error);
+      }
+    },
+    
+    async loadTables() {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        const { data, error } = await this.supabase
+          .from('tables')
+          .select('*')
+          .eq('wedding_id', this.weddingId)
+          .eq('is_active', true);
+        
+        if (error) throw error;
+        
+        this.tables = data || [];
+      } catch (error) {
+        console.error('Error loading tables:', error);
+      }
+    },
+    
+    async loadSeats() {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        // Get all seats for tables in this wedding
+        const { data: tableIds } = await this.supabase
+          .from('tables')
+          .select('id')
+          .eq('wedding_id', this.weddingId)
+          .eq('is_active', true);
+        
+        if (!tableIds || tableIds.length === 0) {
+          this.seats = [];
+          return;
         }
-      ];
-      
-      // Initialize sample room elements
-      this.roomElements = [
-        {
-          id: 'df1',
-          type: 'dance-floor',
-          label: this.content.danceFloorLabel || 'Tanzfläche',
-          left: 200,
-          top: 300
+        
+        const ids = tableIds.map(t => t.id);
+        
+        const { data, error } = await this.supabase
+          .from('seats')
+          .select('*')
+          .in('table_id', ids)
+          .eq('is_active', true);
+        
+        if (error) throw error;
+        
+        this.seats = data || [];
+      } catch (error) {
+        console.error('Error loading seats:', error);
+      }
+    },
+    
+    async loadRoomElements() {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        const { data, error } = await this.supabase
+          .from('room_elements')
+          .select('*')
+          .eq('wedding_id', this.weddingId)
+          .eq('is_active', true);
+        
+        if (error) throw error;
+        
+        this.roomElements = data || [];
+      } catch (error) {
+        console.error('Error loading room elements:', error);
+      }
+    },
+    
+    async loadGuests() {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        const { data, error } = await this.supabase
+          .from('guests')
+          .select('*')
+          .eq('wedding_id', this.weddingId)
+          .eq('is_active', true);
+        
+        if (error) throw error;
+        
+        this.guests = data || [];
+      } catch (error) {
+        console.error('Error loading guests:', error);
+      }
+    },
+    
+    // Table Operations
+    async addTable(type) {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        // Get capacity based on table size
+        const capacityMap = {
+          small: 6,
+          medium: 8,
+          large: 10,
+          xl: 12
+        };
+        
+        const capacity = capacityMap[this.tableSize] || 8;
+        
+        // Calculate position (center of floor plan)
+        const floorPlan = this.$refs.floorPlan;
+        const centerX = floorPlan ? floorPlan.clientWidth / 2 : 300;
+        const centerY = floorPlan ? floorPlan.clientHeight / 2 : 200;
+        
+        // Create new table
+        const { data, error } = await this.supabase
+          .from('tables')
+          .insert([{
+            wedding_id: this.weddingId,
+            number: `Tisch ${this.tables.length + 1}`,
+            type: type,
+            capacity: capacity,
+            color: this.selectedColor,
+            position_x: centerX,
+            position_y: centerY
+          }])
+          .select();
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          // Add table to local state
+          this.tables.push(data[0]);
+          
+          // Create seats for the table
+          await this.createSeatsForTable(data[0].id, capacity);
         }
-      ];
-    },
-    generateSeats(tableId, count) {
-      const seats = [];
-      for (let i = 1; i <= count; i++) {
-        seats.push({
-          id: `${tableId}-${i}`,
-          number: i,
-          guestId: '',
-          notes: ''
-        });
-      }
-      return seats;
-    },
-    addTable(type) {
-      const tableId = `table-${Date.now()}`;
-      const capacity = this.getCapacityFromSize(this.tableSize);
-      
-      const newTable = {
-        id: tableId,
-        type: type,
-        number: (this.tables.length + 1).toString(),
-        capacity: capacity,
-        color: this.selectedColor,
-        left: 100,
-        top: 100,
-        notes: '',
-        seats: this.generateSeats(tableId, capacity)
-      };
-      
-      this.tables.push(newTable);
-    },
-    getCapacityFromSize(size) {
-      switch (size) {
-        case 'small': return 6;
-        case 'medium': return 8;
-        case 'large': return 10;
-        case 'xl': return 12;
-        default: return 8;
+      } catch (error) {
+        console.error('Error adding table:', error);
       }
     },
-    addRoomElement(type) {
-      const elementId = `${type}-${Date.now()}`;
-      let label = '';
-      
-      switch (type) {
-        case 'danceFloor':
-          label = this.content.danceFloorLabel || 'Tanzfläche';
-          type = 'dance-floor';
-          break;
-        case 'bar':
-          label = this.content.barLabel || 'Bar';
-          break;
-        case 'stage':
-          label = this.content.stageLabel || 'Bühne';
-          break;
+    
+    async createSeatsForTable(tableId, capacity) {
+      try {
+        if (!this.supabase) return;
+        
+        // Create seats array
+        const seatsToCreate = [];
+        for (let i = 1; i <= capacity; i++) {
+          seatsToCreate.push({
+            table_id: tableId,
+            number: i
+          });
+        }
+        
+        // Insert seats
+        const { data, error } = await this.supabase
+          .from('seats')
+          .insert(seatsToCreate)
+          .select();
+        
+        if (error) throw error;
+        
+        // Add seats to local state
+        if (data) {
+          this.seats = [...this.seats, ...data];
+        }
+      } catch (error) {
+        console.error('Error creating seats:', error);
       }
-      
-      const newElement = {
-        id: elementId,
-        type: type,
-        label: label,
-        left: 100,
-        top: 100
-      };
-      
-      this.roomElements.push(newElement);
     },
+    
+    async updateTablePosition(table) {
+      try {
+        if (!this.supabase) return;
+        
+        const { error } = await this.supabase
+          .from('tables')
+          .update({
+            position_x: table.position_x,
+            position_y: table.position_y
+          })
+          .eq('id', table.id);
+        
+        if (error) throw error;
+      } catch (error) {
+        console.error('Error updating table position:', error);
+      }
+    },
+    
+    async saveTableProperties() {
+      try {
+        if (!this.supabase) return;
+        
+        const { error } = await this.supabase
+          .from('tables')
+          .update({
+            number: this.editingTable.number,
+            capacity: this.editingTable.capacity,
+            color: this.editingTable.color,
+            notes: this.editingTable.notes
+          })
+          .eq('id', this.editingTable.id);
+        
+        if (error) throw error;
+        
+        // Update local state
+        const index = this.tables.findIndex(t => t.id === this.editingTable.id);
+        if (index !== -1) {
+          this.tables[index] = {
+            ...this.tables[index],
+            number: this.editingTable.number,
+            capacity: this.editingTable.capacity,
+            color: this.editingTable.color,
+            notes: this.editingTable.notes
+          };
+        }
+        
+        // Close modal
+        this.closeTablePropertiesModal();
+      } catch (error) {
+        console.error('Error saving table properties:', error);
+      }
+    },
+    
+    // Room Element Operations
+    async addRoomElement(type) {
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        // Get label based on type
+        const labelMap = {
+          danceFloor: this.content.danceFloorLabel || 'Tanzfläche',
+          bar: this.content.barLabel || 'Bar',
+          stage: this.content.stageLabel || 'Bühne'
+        };
+        
+        // Calculate position (center of floor plan)
+        const floorPlan = this.$refs.floorPlan;
+        const centerX = floorPlan ? floorPlan.clientWidth / 2 : 300;
+        const centerY = floorPlan ? floorPlan.clientHeight / 2 : 200;
+        
+        // Create new room element
+        const { data, error } = await this.supabase
+          .from('room_elements')
+          .insert([{
+            wedding_id: this.weddingId,
+            type: type,
+            label: labelMap[type] || type,
+            position_x: centerX,
+            position_y: centerY,
+            width: 100,
+            height: 100
+          }])
+          .select();
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          // Add room element to local state
+          this.roomElements.push(data[0]);
+        }
+      } catch (error) {
+        console.error('Error adding room element:', error);
+      }
+    },
+    
+    async updateRoomElementPosition(element) {
+      try {
+        if (!this.supabase) return;
+        
+        const { error } = await this.supabase
+          .from('room_elements')
+          .update({
+            position_x: element.position_x,
+            position_y: element.position_y
+          })
+          .eq('id', element.id);
+        
+        if (error) throw error;
+      } catch (error) {
+        console.error('Error updating room element position:', error);
+      }
+    },
+    
+    // Guest Assignment Operations
+    async saveGuestAssignment() {
+      try {
+        if (!this.supabase) return;
+        
+        const { error } = await this.supabase
+          .from('seats')
+          .update({
+            guest_id: this.editingSeat.guest_id || null,
+            notes: this.editingSeat.notes
+          })
+          .eq('id', this.editingSeat.id);
+        
+        if (error) throw error;
+        
+        // Update local state
+        const index = this.seats.findIndex(s => s.id === this.editingSeat.id);
+        if (index !== -1) {
+          this.seats[index] = {
+            ...this.seats[index],
+            guest_id: this.editingSeat.guest_id || null,
+            notes: this.editingSeat.notes
+          };
+        }
+        
+        // Close modal
+        this.closeGuestAssignmentModal();
+      } catch (error) {
+        console.error('Error saving guest assignment:', error);
+      }
+    },
+    
+    // UI Interaction Methods
     selectColor(color) {
       this.selectedColor = color;
     },
+    
     setGuestFilter(filter) {
       this.guestFilter = filter;
     },
-    isGuestAssigned(guestId) {
-      // Check if guest is assigned to any seat
-      for (const table of this.tables) {
-        for (const seat of table.seats) {
-          if (seat.guestId === guestId) {
-            return true;
-          }
-        }
+    
+    zoomIn() {
+      if (this.zoomLevel < 2) {
+        this.zoomLevel += 0.1;
       }
-      return false;
     },
-    getGuestName(guestId) {
-      const guest = this.guests.find(g => g.id === guestId);
-      return guest ? guest.name : '';
+    
+    zoomOut() {
+      if (this.zoomLevel > 0.5) {
+        this.zoomLevel -= 0.1;
+      }
     },
-    // Drag and drop for tables and room elements
-    startDrag(event, item) {
+    
+    resetView() {
+      this.zoomLevel = 1;
+    },
+    
+    openTableProperties(table) {
+      this.editingTable = { ...table };
+      this.showTablePropertiesModal = true;
+    },
+    
+    closeTablePropertiesModal() {
+      this.showTablePropertiesModal = false;
+    },
+    
+    openGuestAssignment(seat) {
+      this.editingSeat = { ...seat };
+      this.showGuestAssignmentModal = true;
+    },
+    
+    closeGuestAssignmentModal() {
+      this.showGuestAssignmentModal = false;
+    },
+    
+    // Drag and Drop
+    startDrag(event, element) {
       this.isDragging = true;
-      this.draggedItem = item;
+      this.draggedElement = element;
       
       const rect = event.target.getBoundingClientRect();
       this.dragOffsetX = event.clientX - rect.left;
@@ -581,244 +865,240 @@ export default {
       
       event.preventDefault();
     },
-    drag(event) {
-      if (!this.isDragging || !this.draggedItem) return;
+    
+    onMouseMove(event) {
+      if (!this.isDragging || !this.draggedElement) return;
       
       const floorPlan = this.$refs.floorPlan;
+      if (!floorPlan) return;
+      
       const rect = floorPlan.getBoundingClientRect();
+      const x = event.clientX - rect.left - this.dragOffsetX;
+      const y = event.clientY - rect.top - this.dragOffsetY;
       
-      // Calculate new position, accounting for zoom level
-      const newLeft = (event.clientX - rect.left - this.dragOffsetX) / this.zoomLevel;
-      const newTop = (event.clientY - rect.top - this.dragOffsetY) / this.zoomLevel;
-      
-      // Update position
-      this.draggedItem.left = Math.max(0, newLeft);
-      this.draggedItem.top = Math.max(0, newTop);
-      
-      event.preventDefault();
+      // Update element position
+      if (this.draggedElement.type) {
+        // It's a table
+        const tableIndex = this.tables.findIndex(t => t.id === this.draggedElement.id);
+        if (tableIndex !== -1) {
+          this.tables[tableIndex].position_x = x;
+          this.tables[tableIndex].position_y = y;
+        }
+      } else {
+        // It's a room element
+        const elementIndex = this.roomElements.findIndex(e => e.id === this.draggedElement.id);
+        if (elementIndex !== -1) {
+          this.roomElements[elementIndex].position_x = x;
+          this.roomElements[elementIndex].position_y = y;
+        }
+      }
     },
-    endDrag() {
+    
+    async onMouseUp() {
+      if (!this.isDragging || !this.draggedElement) return;
+      
+      // Save position to database
+      if (this.draggedElement.type) {
+        // It's a table
+        await this.updateTablePosition(this.draggedElement);
+      } else {
+        // It's a room element
+        await this.updateRoomElementPosition(this.draggedElement);
+      }
+      
       this.isDragging = false;
-      this.draggedItem = null;
+      this.draggedElement = null;
     },
-    // Drag and drop for guests
+    
     dragStart(event, guest) {
       event.dataTransfer.setData('guest-id', guest.id);
     },
+    
     dragOver(event) {
       event.preventDefault();
     },
-    drop(event) {
+    
+    async drop(event) {
+      event.preventDefault();
+      
       const guestId = event.dataTransfer.getData('guest-id');
       if (!guestId) return;
       
-      // Find the seat element that received the drop
-      let seatElement = event.target;
-      while (seatElement && !seatElement.dataset.seatId) {
-        seatElement = seatElement.parentElement;
-      }
+      // Find closest empty seat
+      const seats = this.seats.filter(seat => !seat.guest_id);
+      if (seats.length === 0) return;
       
-      if (seatElement && seatElement.dataset.seatId) {
-        // Find the seat in our data model
-        const seatId = seatElement.dataset.seatId;
-        for (const table of this.tables) {
-          const seat = table.seats.find(s => s.id === seatId);
-          if (seat) {
-            // Assign guest to seat
-            seat.guestId = guestId;
-            break;
-          }
-        }
-      }
-    },
-    // Zoom controls
-    zoomIn() {
-      this.zoomLevel = Math.min(2, this.zoomLevel + 0.1);
-    },
-    zoomOut() {
-      this.zoomLevel = Math.max(0.5, this.zoomLevel - 0.1);
-    },
-    resetView() {
-      this.zoomLevel = 1;
-    },
-    // Table properties modal
-    openTableProperties(table) {
-      this.editingTable = { ...table };
-      this.showTablePropertiesModal = true;
-    },
-    closeTablePropertiesModal() {
-      this.showTablePropertiesModal = false;
-    },
-    saveTableProperties() {
-      // Find the table in our data model and update it
-      const table = this.tables.find(t => t.id === this.editingTable.id);
-      if (table) {
-        table.number = this.editingTable.number;
-        table.capacity = this.editingTable.capacity;
-        table.color = this.editingTable.color;
-        table.notes = this.editingTable.notes;
+      // Assign guest to first available seat
+      try {
+        if (!this.supabase) return;
         
-        // Update seats if capacity changed
-        if (table.seats.length !== table.capacity) {
-          // Keep existing seat assignments if possible
-          const existingSeats = table.seats;
-          table.seats = this.generateSeats(table.id, table.capacity);
-          
-          // Restore guest assignments for seats that still exist
-          for (let i = 0; i < Math.min(existingSeats.length, table.seats.length); i++) {
-            table.seats[i].guestId = existingSeats[i].guestId;
-            table.seats[i].notes = existingSeats[i].notes;
-          }
+        const { error } = await this.supabase
+          .from('seats')
+          .update({ guest_id: guestId })
+          .eq('id', seats[0].id);
+        
+        if (error) throw error;
+        
+        // Update local state
+        const index = this.seats.findIndex(s => s.id === seats[0].id);
+        if (index !== -1) {
+          this.seats[index].guest_id = guestId;
         }
+      } catch (error) {
+        console.error('Error assigning guest to seat:', error);
       }
-      
-      this.closeTablePropertiesModal();
     },
-    // Guest assignment modal
-    openGuestAssignment(seat) {
-      this.editingSeat = { ...seat };
-      this.showGuestAssignmentModal = true;
+    
+    // Helper Methods
+    getTableSeats(tableId) {
+      return this.seats.filter(seat => seat.table_id === tableId);
     },
-    closeGuestAssignmentModal() {
-      this.showGuestAssignmentModal = false;
+    
+    getGuestName(guestId) {
+      const guest = this.guests.find(g => g.id === guestId);
+      return guest ? guest.name : '';
     },
-    saveGuestAssignment() {
-      // Find the seat in our data model and update it
-      for (const table of this.tables) {
-        const seat = table.seats.find(s => s.id === this.editingSeat.id);
-        if (seat) {
-          seat.guestId = this.editingSeat.guestId;
-          seat.notes = this.editingSeat.notes;
-          break;
-        }
-      }
-      
-      this.closeGuestAssignmentModal();
-    },
-    // Action buttons
-    deleteSelected() {
-      // In a real implementation, this would delete the selected item
+    
+    async deleteSelected() {
+      // Not implemented yet
       alert(this.content.deleteSelectedMessage || 'Ausgewähltes Element löschen');
     },
-    clearAll() {
-      if (confirm(this.content.clearAllConfirmMessage || 'Möchten Sie wirklich alle Elemente zurücksetzen?')) {
+    
+    async clearAll() {
+      if (!confirm(this.content.clearAllConfirmMessage || 'Möchten Sie wirklich alle Elemente zurücksetzen?')) {
+        return;
+      }
+      
+      try {
+        if (!this.supabase || !this.weddingId) return;
+        
+        // Clear all seats
+        await this.supabase
+          .from('seats')
+          .update({ is_active: false })
+          .in('table_id', this.tables.map(t => t.id));
+        
+        // Clear all tables
+        await this.supabase
+          .from('tables')
+          .update({ is_active: false })
+          .eq('wedding_id', this.weddingId);
+        
+        // Clear all room elements
+        await this.supabase
+          .from('room_elements')
+          .update({ is_active: false })
+          .eq('wedding_id', this.weddingId);
+        
+        // Clear local state
         this.tables = [];
+        this.seats = [];
         this.roomElements = [];
+      } catch (error) {
+        console.error('Error clearing all elements:', error);
       }
     },
-    saveLayout() {
-      // In a real implementation, this would save the layout to the server
+    
+    async saveLayout() {
+      // Just show a message for now
       alert(this.content.saveLayoutMessage || 'Layout gespeichert');
     },
+    
     printLayout() {
-      // In a real implementation, this would open a print dialog
+      // Just show a message for now
       alert(this.content.printLayoutMessage || 'Druckansicht wird geöffnet');
     }
   }
 };
 </script>
 
-<style scoped>
-/* Table Planner styles */
+<style>
 .lv-table-planner {
-  padding: 20px 0;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
 }
 
 .lv-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-.lv-mb-3 {
-  margin-bottom: 1rem;
-}
-
-.lv-mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.lv-p-3 {
-  padding: 1rem;
+  padding: 15px;
 }
 
 .lv-row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  margin: 0 -15px;
 }
 
 .lv-col {
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 0 15px;
+  flex: 1;
 }
 
-@media (min-width: 768px) {
-  .lv-col-md-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-  
-  .lv-col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-  
-  .lv-col-md-9 {
-    flex: 0 0 75%;
-    max-width: 75%;
-  }
+.lv-col-md-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
 }
 
-/* Card styles */
+.lv-col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.lv-col-md-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+
+.lv-mb-2 {
+  margin-bottom: 10px;
+}
+
+.lv-mb-3 {
+  margin-bottom: 15px;
+}
+
+.lv-p-3 {
+  padding: 15px;
+}
+
 .lv-card {
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
 .lv-card-header {
-  padding: 1rem;
-  background-color: #f9f9f9;
+  padding: 15px;
   border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.lv-card-header h3 {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
 .lv-card-body {
-  padding: 1rem;
+  padding: 15px;
 }
 
-/* Stats styles */
 .lv-stats-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  text-align: center;
+  justify-content: space-between;
 }
 
 .lv-stat-item {
-  padding: 0.5rem;
+  text-align: center;
+  padding: 10px;
+  flex: 1;
+  min-width: 80px;
 }
 
 .lv-stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .lv-stat-label {
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #666;
 }
 
@@ -830,159 +1110,128 @@ export default {
   color: #ffc107;
 }
 
-/* Control panel styles */
-.lv-control-section {
-  margin-bottom: 1.5rem;
-}
-
-.lv-control-section h4 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-}
-
 .lv-btn-group {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 5px;
 }
 
-/* Button styles */
 .lv-btn {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
   cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
 .lv-btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  border-radius: 0.2rem;
+  padding: 5px 10px;
+  font-size: 12px;
 }
 
 .lv-btn-primary {
-  color: #fff;
-  background-color: #f8c630;
-  border-color: #f8c630;
+  background-color: #007bff;
+  color: white;
 }
 
 .lv-btn-primary:hover {
-  background-color: #e6b520;
-  border-color: #e6b520;
+  background-color: #0069d9;
 }
 
 .lv-btn-outline {
-  color: #6c757d;
   background-color: transparent;
-  border-color: #6c757d;
+  border: 1px solid #ccc;
 }
 
 .lv-btn-outline:hover {
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #f8f9fa;
 }
 
 .lv-btn-danger {
-  color: #dc3545;
-  border-color: #dc3545;
+  background-color: #dc3545;
+  color: white;
 }
 
 .lv-btn-danger:hover {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: #c82333;
 }
 
-/* Form styles */
 .lv-form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 .lv-form-label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 5px;
   font-weight: 500;
 }
 
 .lv-form-control {
-  display: block;
   width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.lv-form-control:focus {
-  border-color: #f8c630;
-  outline: 0;
-}
-
-/* Color picker styles */
 .lv-color-picker {
   display: flex;
+  gap: 5px;
   flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .lv-color-option {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  border: 2px solid transparent;
   cursor: pointer;
+  border: 1px solid #ccc;
 }
 
 .lv-color-active {
-  border-color: #f8c630;
+  border: 2px solid #007bff;
 }
 
-/* Guest list styles */
 .lv-search-container {
-  margin-left: auto;
+  position: relative;
 }
 
 .lv-search-input {
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  width: 100%;
+  padding: 8px 30px 8px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.lv-search-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .lv-guest-filter {
   display: flex;
-  gap: 0.5rem;
+  gap: 5px;
 }
 
 .lv-filter-btn {
-  background: none;
-  border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: transparent;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  font-size: 12px;
 }
 
 .lv-filter-active {
-  border-bottom-color: #f8c630;
-  font-weight: 500;
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }
 
 .lv-guest-list {
@@ -991,13 +1240,13 @@ export default {
 }
 
 .lv-guest-item {
-  padding: 0.5rem;
+  padding: 10px;
   border-bottom: 1px solid #eee;
   cursor: grab;
 }
 
-.lv-guest-item:last-child {
-  border-bottom: none;
+.lv-guest-item:hover {
+  background-color: #f8f9fa;
 }
 
 .lv-guest-name {
@@ -1005,192 +1254,119 @@ export default {
 }
 
 .lv-guest-info {
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #666;
 }
 
-/* Floor plan styles */
 .lv-floor-plan-container {
-  height: 100%;
-}
-
-.lv-view-controls {
-  display: flex;
-  gap: 0.25rem;
+  height: 600px;
 }
 
 .lv-floor-plan {
   position: relative;
   width: 100%;
-  height: 600px;
-  background-color: #f9f9f9;
+  height: 500px;
+  background-color: #f8f9fa;
   border: 1px solid #eee;
-  overflow: auto;
   transform-origin: top left;
 }
 
-/* Table styles */
+.lv-view-controls {
+  display: flex;
+  gap: 5px;
+}
+
 .lv-table {
   position: absolute;
-  cursor: move;
-  user-select: none;
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid #ddd;
-}
-
-.lv-table-round {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+  cursor: move;
+  user-select: none;
 }
 
 .lv-table-rect {
-  width: 200px;
-  height: 100px;
   border-radius: 4px;
 }
 
 .lv-table-oval {
-  width: 180px;
-  height: 120px;
-  border-radius: 50%;
+  border-radius: 50% / 30%;
 }
 
 .lv-table-number {
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-weight: bold;
 }
 
 .lv-table-capacity {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 12px;
 }
 
 .lv-table-guests {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 5px;
 }
 
-/* Seat styles */
 .lv-seat {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  width: 20px;
+  height: 20px;
+  background-color: #eee;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 10px;
   cursor: pointer;
 }
 
 .lv-seat-occupied {
-  background-color: #e9f8f2;
-  border-color: #06D6A0;
+  background-color: #28a745;
+  color: white;
 }
 
-.lv-seat-number {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.lv-seat-guest {
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 0.1rem 0.25rem;
-  border-radius: 2px;
-}
-
-/* Round table seat positioning */
-.lv-table-round .lv-seat:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(2) { top: 14.6%; right: 14.6%; transform: translateX(50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(3) { top: 50%; right: 0; transform: translateX(50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(4) { bottom: 14.6%; right: 14.6%; transform: translateX(50%) translateY(50%); }
-.lv-table-round .lv-seat:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%) translateY(50%); }
-.lv-table-round .lv-seat:nth-child(6) { bottom: 14.6%; left: 14.6%; transform: translateX(-50%) translateY(50%); }
-.lv-table-round .lv-seat:nth-child(7) { top: 50%; left: 0; transform: translateX(-50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(8) { top: 14.6%; left: 14.6%; transform: translateX(-50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(9) { top: 7%; left: 50%; transform: translateX(-50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(10) { top: 50%; right: 7%; transform: translateX(50%) translateY(-50%); }
-.lv-table-round .lv-seat:nth-child(11) { bottom: 7%; left: 50%; transform: translateX(-50%) translateY(50%); }
-.lv-table-round .lv-seat:nth-child(12) { top: 50%; left: 7%; transform: translateX(-50%) translateY(-50%); }
-
-/* Rectangular table seat positioning */
-.lv-table-rect .lv-seat:nth-child(1) { top: -15px; left: 25%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(2) { top: -15px; left: 50%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(3) { top: -15px; left: 75%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(4) { bottom: -15px; left: 75%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(5) { bottom: -15px; left: 50%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(6) { bottom: -15px; left: 25%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(7) { top: 50%; left: -15px; transform: translateY(-50%); }
-.lv-table-rect .lv-seat:nth-child(8) { top: 50%; right: -15px; transform: translateY(-50%); }
-.lv-table-rect .lv-seat:nth-child(9) { top: -15px; left: 12.5%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(10) { top: -15px; left: 87.5%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(11) { bottom: -15px; left: 87.5%; transform: translateX(-50%); }
-.lv-table-rect .lv-seat:nth-child(12) { bottom: -15px; left: 12.5%; transform: translateX(-50%); }
-
-/* Oval table seat positioning - similar to rectangular but with adjusted positions */
-.lv-table-oval .lv-seat:nth-child(1) { top: -15px; left: 25%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(2) { top: -15px; left: 50%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(3) { top: -15px; left: 75%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(4) { bottom: -15px; left: 75%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(5) { bottom: -15px; left: 50%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(6) { bottom: -15px; left: 25%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(7) { top: 50%; left: -15px; transform: translateY(-50%); }
-.lv-table-oval .lv-seat:nth-child(8) { top: 50%; right: -15px; transform: translateY(-50%); }
-.lv-table-oval .lv-seat:nth-child(9) { top: -15px; left: 12.5%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(10) { top: -15px; left: 87.5%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(11) { bottom: -15px; left: 87.5%; transform: translateX(-50%); }
-.lv-table-oval .lv-seat:nth-child(12) { bottom: -15px; left: 12.5%; transform: translateX(-50%); }
-
-/* Room element styles */
 .lv-room-element {
   position: absolute;
-  cursor: move;
-  user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #aaa;
-  text-align: center;
+  cursor: move;
+  user-select: none;
 }
 
-.lv-dance-floor {
+.lv-danceFloor {
   width: 150px;
   height: 150px;
-  background-color: rgba(173, 216, 230, 0.3);
+  background-color: rgba(0, 123, 255, 0.2);
+  border: 2px dashed #007bff;
 }
 
 .lv-bar {
-  width: 120px;
-  height: 60px;
-  background-color: rgba(245, 222, 179, 0.3);
-  border-radius: 4px;
+  width: 100px;
+  height: 50px;
+  background-color: rgba(255, 193, 7, 0.2);
+  border: 2px solid #ffc107;
 }
 
 .lv-stage {
-  width: 180px;
+  width: 150px;
   height: 80px;
-  background-color: rgba(211, 211, 211, 0.3);
-  border-radius: 4px;
+  background-color: rgba(108, 117, 125, 0.2);
+  border: 2px solid #6c757d;
 }
 
 .lv-element-label {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-/* Modal styles */
 .lv-modal {
   display: none;
   position: fixed;
@@ -1211,66 +1387,59 @@ export default {
 .lv-modal-dialog {
   width: 100%;
   max-width: 500px;
-  margin: 1.75rem auto;
+  margin: 30px auto;
+}
+
+.lv-modal-sm {
+  max-width: 300px;
 }
 
 .lv-modal-content {
-  position: relative;
   background-color: #fff;
-  border-radius: 0.3rem;
-  outline: 0;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .lv-modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.lv-modal-header h3 {
-  margin: 0;
-  font-size: 1.25rem;
+  align-items: center;
 }
 
 .lv-modal-close {
   background: none;
   border: none;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
-  opacity: 0.5;
+  font-size: 24px;
   cursor: pointer;
 }
 
 .lv-modal-body {
-  padding: 1rem;
+  padding: 15px;
 }
 
 .lv-modal-footer {
+  padding: 15px;
+  border-top: 1px solid #eee;
   display: flex;
   justify-content: flex-end;
-  padding: 1rem;
-  border-top: 1px solid #dee2e6;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .lv-stats-container {
-    flex-direction: column;
-    align-items: center;
+  .lv-col-md-3, .lv-col-md-6, .lv-col-md-9 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
   
-  .lv-stat-item {
-    width: 100%;
-    margin-bottom: 0.5rem;
+  .lv-floor-plan-container {
+    height: 400px;
   }
   
   .lv-floor-plan {
-    height: 400px;
+    height: 300px;
   }
 }
 </style>
